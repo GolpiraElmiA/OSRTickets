@@ -2,3 +2,4 @@ streamlit
 matplotlib
 seaborn
 google-auth
+google-api-python-client
