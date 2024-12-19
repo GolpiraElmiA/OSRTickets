@@ -1,7 +1,4 @@
 streamlit
 matplotlib
 seaborn
-google.oauth2.service_account
-googleapiclient.discovery
-googleapiclient.http
-dotenv
+google-auth
