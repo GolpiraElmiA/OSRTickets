@@ -3,7 +3,7 @@ st.set_page_config(page_title="Support Tickets", page_icon="🎫", layout="wide"
 
 import datetime
 import pandas as pd
-import matplotlib.pyplot as plt
+import mathplotlib.pyplot as plt
 import seaborn as sns
 import os
 import io
