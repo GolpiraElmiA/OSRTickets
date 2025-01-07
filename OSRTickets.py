@@ -12,9 +12,6 @@ import os
 import io
 import time
 
-
-folder_id='15bylSeJUB_g8wx6LNx5FLbYY_V33icun' ### Added
-
 # Access the credentials stored in Streamlit secrets
 google_secrets = st.secrets["google_service_account"]["service_account_json"]
 
@@ -31,40 +28,26 @@ credentials = Credentials.from_service_account_info(
 drive_service = build('drive', 'v3', credentials=credentials)
 
 # Define function to upload data to Google Drive
-def upload_file(file_path, file_name, folder_id=None):
-    # Check if the file already exists in the folder
-    query = f"name='{file_name}'"
-    if folder_id:
-        query += f" and '{folder_id}' in parents"
-    results = drive_service.files().list(q=query, fields="files(id, name)").execute()
+def upload_file(file_path, file_name):
+    results = drive_service.files().list(
+        q=f"name='{file_name}'", fields="files(id, name)").execute()
     items = results.get('files', [])
     
-    # If file exists, delete it before uploading
     if items:
         file_id = items[0]['id']
         drive_service.files().delete(fileId=file_id).execute()
     
-    # Upload the file to the specified folder
-    media = MediaFileUpload(file_path, mimetype='text/csv') # Changed from mimetype='application/vnd.ms-excel'
-    metadata = {'name': file_name}
-    if folder_id:
-        metadata['parents'] = [folder_id]
-    
+    media = MediaFileUpload(file_path, mimetype='text/csv')
     file = drive_service.files().create(
         media_body=media,
-        body=metadata
+        body={'name': file_name}
     ).execute()
-    
     return file.get('id')
 
-def save_to_drive(df, file_name, folder_id=None):
-    # Save the DataFrame to a temporary file
+def save_to_drive(df, file_name):
     file_path = f"/tmp/{file_name}"
     df.to_csv(file_path, index=False)
-    # Upload the file to Google Drive
-    upload_file(file_path, file_name, folder_id) ####Added to show in GoogleDrive
-
-
+    upload_file(file_path, file_name)
 
 def load_data():
     file_name = 'StatisticalAnalysisTickets.csv'
