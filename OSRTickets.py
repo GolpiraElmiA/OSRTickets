@@ -77,7 +77,7 @@ def reset_data(password):
     return False
 
 # Streamlit page configuration
-st.title("Office of Surgical Research and Orthopeadic Trauma Research Team")
+st.title("Office of Surgical Research | Orthopeadic Trauma Research")
 st.header("Statistical Support Request Form")
 
 # Ticket Form
