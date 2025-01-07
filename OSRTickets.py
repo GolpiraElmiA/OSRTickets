@@ -88,19 +88,21 @@ departments = [
 
 # Form for ticket creation
 with st.form("add_ticket_form"):
+    name = st.text_area("Name", placeholder="Please enter your full name here")
     request_type = st.selectbox("Request Type", ["New", "Follow-up"])
     department = st.selectbox("Department", departments)
     email = st.text_area("Email Address", placeholder="Enter your email address here...")
     issue = st.text_area("Description of the Issue", placeholder="Briefly describe the work or issue you're submitting.")
     priority = st.selectbox("Priority Level", ["High", "Medium", "Low"])
     date_submitted = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    summary = issue[:100]  # Create a brief summary (first 100 characters)
+    summary = issue[:5000]  # Create a brief summary (first 5000 characters)
 
     submitted = st.form_submit_button("Submit")
     if submitted:
         ticket_id = f"T{len(st.session_state.df) + 1}"
         new_ticket = {
             "ID": ticket_id,
+            "Name: name,
             "Request Type": request_type,
             "Email": email,
             "Department": department,
@@ -116,6 +118,24 @@ with st.form("add_ticket_form"):
 # Display Ticket Table
 st.subheader("Submitted Tickets")
 st.dataframe(st.session_state.df)
+###########
+# Add a status dropdown in each row for editing
+for idx, row in df.iterrows():
+    status_options = ["Open", "In Progress", "Completed"]
+    selected_status = st.selectbox(
+        label=f"Status for Ticket {row['ID']}",
+        options=status_options,
+        index=status_options.index(row['Status']),
+        key=f"status_{row['ID']}"
+    )
+    
+    if st.button(f"Update Status for Ticket {row['ID']}", key=f"update_{row['ID']}"):
+        update_status(row['ID'], selected_status)
+
+st.dataframe(df)  # Display the updated dataframe
+else:
+    st.warning("No data available to display.")
+    ###########
 
 # Insights section
 if not st.session_state.df.empty:
