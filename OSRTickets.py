@@ -122,39 +122,56 @@ with st.form("add_ticket_form"):
 st.subheader("Submitted Tickets")
 
 # Use st.data_editor for inline editing of the DataFrame
-edited_df = st.data_editor(
-    st.session_state.df,
-    use_container_width=True,
-    num_rows="dynamic",
-    key="tickets_table",
-)
+# Password input for table editing
+password_input = st.text_input("Enter password to enable ticket edits", type="password")
 
-# Save the edits to session state and Google Drive
-if not edited_df.equals(st.session_state.df):
-    st.session_state.df = edited_df
-    save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
-    st.success("Tickets updated successfully!")
+if password_input == "reset123":
+    # Allow editing if the password is correct
+    edited_df = st.data_editor(
+        st.session_state.df,
+        use_container_width=True,
+        num_rows="dynamic",
+        key="tickets_table",
+    )
+
+    # Save the edits to session state and Google Drive
+    if not edited_df.equals(st.session_state.df):
+        st.session_state.df = edited_df
+        save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
+        st.success("Tickets updated successfully!")
+
+    # Display the tickets and allow status updates
+    status_options = ["Open", "Closed", "In Progress"]  # Replace with actual status options
+
+    for idx, row in st.session_state.df.iterrows():
+        col1, col2, col3, col4 = st.columns([1, 1, 1, 1])  # Create columns for each section
+
+        with col1:
+            st.write(f"Ticket ID: {row['ID']}")
+        
+        with col2:
+            st.write(f"Name: {row['Name']}")
+
+        with col3:
+            status = st.selectbox(
+                label="Status", 
+                options=status_options, 
+                index=status_options.index(row['Status']),
+                key=f"status_{row['ID']}"
+            )
+        
+        with col4:
+            if st.button(f"Update Status for Ticket {row['ID']}", key=f"update_{row['ID']}"):
+                st.session_state.df.at[idx, 'Status'] = status
+                save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
+                st.success(f"Status for Ticket {row['ID']} has been updated to {status}")
+
+else:
+    # Display the table without editing capabilities if password is incorrect or not entered
+    st.write("You must enter the correct password to edit the table.")
+    st.dataframe(st.session_state.df)
 
 
-    with col1:
-        st.write(f"Ticket ID: {row['ID']}")
-    
-    with col2:
-        st.write(f"Name: {row['Name']}")
-
-    with col3:
-        status = st.selectbox(
-            label="Status", 
-            options=status_options, 
-            index=status_options.index(row['Status']),
-            key=f"status_{row['ID']}"
-        )
-    
-    with col4:
-        if st.button(f"Update Status for Ticket {row['ID']}", key=f"update_{row['ID']}"):
-            st.session_state.df.at[idx, 'Status'] = status
-            save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
-            st.success(f"Status for Ticket {row['ID']} has been updated to {status}")
 
 # Insights section
 if not st.session_state.df.empty:
