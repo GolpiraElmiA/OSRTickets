@@ -133,8 +133,8 @@ for idx, row in df.iterrows():
         update_status(row['ID'], selected_status)
 
 st.dataframe(df)  # Display the updated dataframe
-else:
-    st.warning("No data available to display.")
+    else:
+        st.warning("No data available to display.")
     ###########
 
 # Insights section
