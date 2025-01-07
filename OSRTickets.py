@@ -127,7 +127,7 @@ for idx, row in st.session_state.df.iterrows():
         st.write(f"Ticket ID: {row['ID']}")
     
     with col2:
-        st.write(f"Name: {row['name']}")
+        st.write(f"Name: {row['Name']}")
 
     with col3:
         status = st.selectbox(
