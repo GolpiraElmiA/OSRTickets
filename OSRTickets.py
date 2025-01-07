@@ -127,9 +127,6 @@ edited_df = st.data_editor(
     use_container_width=True,
     num_rows="dynamic",
     key="tickets_table",
-    column_config={
-        "ID": st.column_config.TextColumn(read_only=True),  # Make IDs read-only
-        "Date Submitted": st.column_config.TextColumn(read_only=True),  # Lock date
     }
 )
 
