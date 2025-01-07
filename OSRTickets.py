@@ -90,7 +90,6 @@ def reset_data(password):
     if password == correct_password:
         st.session_state.df = pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Department", "Status", "Priority", "Date Submitted", "Summary"])
         save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
-        save_to_drive(st.session_state.df, "StatisticalAnalysisTickets.csv", folder_id) # added
         return True
     return False
 
