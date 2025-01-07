@@ -121,10 +121,24 @@ with st.form("add_ticket_form"):
 # Display Ticket Table
 st.subheader("Submitted Tickets")
 
-# Editable table with status selection for each ticket
-status_options = ["Open", "In Progress", "Completed"]
-for idx, row in st.session_state.df.iterrows():
-    col1, col2, col3, col4 = st.columns([1, 2, 2, 2])
+# Use st.data_editor for inline editing of the DataFrame
+edited_df = st.data_editor(
+    st.session_state.df,
+    use_container_width=True,
+    num_rows="dynamic",
+    key="tickets_table",
+    column_config={
+        "ID": st.column_config.TextColumn(read_only=True),  # Make IDs read-only
+        "Date Submitted": st.column_config.TextColumn(read_only=True),  # Lock date
+    }
+)
+
+# Save the edits to session state and Google Drive
+if not edited_df.equals(st.session_state.df):
+    st.session_state.df = edited_df
+    save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
+    st.success("Tickets updated successfully!")
+
 
     with col1:
         st.write(f"Ticket ID: {row['ID']}")
