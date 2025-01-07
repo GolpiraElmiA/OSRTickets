@@ -102,7 +102,7 @@ with st.form("add_ticket_form"):
         ticket_id = f"T{len(st.session_state.df) + 1}"
         new_ticket = {
             "ID": ticket_id,
-            "Name: name,
+            "name: name,
             "Request Type": request_type,
             "Email": email,
             "Department": department,
