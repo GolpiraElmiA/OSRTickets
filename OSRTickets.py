@@ -63,6 +63,9 @@ def load_data():
 # Initialize or load data into session state
 if "df" not in st.session_state:
     st.session_state.df = load_data()
+    # Ensure the 'Name' column exists
+    if 'Name' not in st.session_state.df.columns:
+        st.session_state.df['Name'] = ''
 
 # Reset functionality
 def reset_data(password):
