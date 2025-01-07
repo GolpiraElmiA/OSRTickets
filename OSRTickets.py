@@ -12,6 +12,9 @@ import os
 import io
 import time
 
+
+folder_id='15bylSeJUB_g8wx6LNx5FLbYY_V33icun' ### Added
+
 # Access the credentials stored in Streamlit secrets
 google_secrets = st.secrets["google_service_account"]["service_account_json"]
 
@@ -44,10 +47,13 @@ def upload_file(file_path, file_name):
     ).execute()
     return file.get('id')
 
-def save_to_drive(df, file_name):
+def save_to_drive(df, file_name, folder_id): ## added folder_id
     file_path = f"/tmp/{file_name}"
     df.to_csv(file_path, index=False)
     upload_file(file_path, file_name)
+    upload_file(file_path,file_name,folder_id) ####Added to show in GoogleDrive
+
+
 
 def load_data():
     file_name = 'StatisticalAnalysisTickets.csv'
@@ -73,6 +79,7 @@ def reset_data(password):
     if password == correct_password:
         st.session_state.df = pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Department", "Status", "Priority", "Date Submitted", "Summary"])
         save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
+        save_to_drive(st.session_state.df, "StatisticalAnalysisTickets.csv", folder_id) # added
         return True
     return False
 
