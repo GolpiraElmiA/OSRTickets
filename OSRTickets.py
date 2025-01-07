@@ -118,24 +118,26 @@ with st.form("add_ticket_form"):
 # Display Ticket Table
 st.subheader("Submitted Tickets")
 st.dataframe(st.session_state.df)
-###########
-# Add a status dropdown in each row for editing
-for idx, row in df.iterrows():
-    status_options = ["Open", "In Progress", "Completed"]
-    selected_status = st.selectbox(
-        label=f"Status for Ticket {row['ID']}",
-        options=status_options,
-        index=status_options.index(row['Status']),
-        key=f"status_{row['ID']}"
-    )
-    
-    if st.button(f"Update Status for Ticket {row['ID']}", key=f"update_{row['ID']}"):
-        update_status(row['ID'], selected_status)
 
-st.dataframe(df)  # Display the updated dataframe
-    else:
-        st.warning("No data available to display.")
-    ###########
+# Add a status dropdown in each row for editing
+if not st.session_state.df.empty:
+    for idx, row in st.session_state.df.iterrows():
+        status_options = ["Open", "In Progress", "Completed"]
+        selected_status = st.selectbox(
+            label=f"Status for Ticket {row['ID']}",
+            options=status_options,
+            index=status_options.index(row['Status']),
+            key=f"status_{row['ID']}"
+        )
+        
+        if st.button(f"Update Status for Ticket {row['ID']}", key=f"update_{row['ID']}"):
+            # Update the status
+            st.session_state.df.at[idx, 'Status'] = selected_status
+            save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
+            st.success(f"Status for Ticket {row['ID']} has been updated to {selected_status}")
+
+else:
+    st.warning("No data available to display.")
 
 # Insights section
 if not st.session_state.df.empty:
@@ -182,5 +184,3 @@ with st.expander("Reset Tickets (Admin Only)"):
             st.success("Tickets have been reset successfully!")
         else:
             st.error("Incorrect password. Tickets were not reset.")
-
-
