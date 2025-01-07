@@ -127,7 +127,6 @@ edited_df = st.data_editor(
     use_container_width=True,
     num_rows="dynamic",
     key="tickets_table",
-    }
 )
 
 # Save the edits to session state and Google Drive
