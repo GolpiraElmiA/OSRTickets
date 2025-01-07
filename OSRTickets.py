@@ -31,27 +31,38 @@ credentials = Credentials.from_service_account_info(
 drive_service = build('drive', 'v3', credentials=credentials)
 
 # Define function to upload data to Google Drive
-def upload_file(file_path, file_name):
-    results = drive_service.files().list(
-        q=f"name='{file_name}'", fields="files(id, name)").execute()
+def upload_file(file_path, file_name, folder_id=None):
+    # Check if the file already exists in the folder
+    query = f"name='{file_name}'"
+    if folder_id:
+        query += f" and '{folder_id}' in parents"
+    results = drive_service.files().list(q=query, fields="files(id, name)").execute()
     items = results.get('files', [])
     
+    # If file exists, delete it before uploading
     if items:
         file_id = items[0]['id']
         drive_service.files().delete(fileId=file_id).execute()
     
+    # Upload the file to the specified folder
     media = MediaFileUpload(file_path, mimetype='application/vnd.ms-excel')
+    metadata = {'name': file_name}
+    if folder_id:
+        metadata['parents'] = [folder_id]
+    
     file = drive_service.files().create(
         media_body=media,
-        body={'name': file_name}
+        body=metadata
     ).execute()
+    
     return file.get('id')
 
-def save_to_drive(df, file_name, folder_id): ## added folder_id
+def save_to_drive(df, file_name, folder_id=None):
+    # Save the DataFrame to a temporary file
     file_path = f"/tmp/{file_name}"
     df.to_csv(file_path, index=False)
-    upload_file(file_path, file_name)
-    upload_file(file_path,file_name,folder_id) ####Added to show in GoogleDrive
+    # Upload the file to Google Drive
+    upload_file(file_path, file_name, folder_id) ####Added to show in GoogleDrive
 
 
 
