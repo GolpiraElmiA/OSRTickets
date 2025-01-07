@@ -45,7 +45,7 @@ def upload_file(file_path, file_name, folder_id=None):
         drive_service.files().delete(fileId=file_id).execute()
     
     # Upload the file to the specified folder
-    media = MediaFileUpload(file_path, mimetype='application/vnd.ms-excel')
+    media = MediaFileUpload(file_path, mimetype='text/csv') # Changed from mimetype='application/vnd.ms-excel'
     metadata = {'name': file_name}
     if folder_id:
         metadata['parents'] = [folder_id]
