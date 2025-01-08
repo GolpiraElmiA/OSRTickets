@@ -64,10 +64,10 @@ def load_data():
 if "df" not in st.session_state:
     st.session_state.df = load_data()
     # Ensure the 'Name' column exists
-    if 'Name' not in st.session_state.df.columns:
-        st.session_state.df['Name'] = ''
+    # if 'Name' not in st.session_state.df.columns:
+    #     st.session_state.df['Name'] = ''
     if 'Priority' in st.session_state.df.columns:
-        st.session_state.df.drop (columns=['Priority'])
+        st.session_state.df.drop (columns=['Priority'], inplace=True)
 
 # Reset functionality
 def reset_data(password):
