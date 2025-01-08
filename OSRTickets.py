@@ -179,6 +179,7 @@ st.markdown(
     <style>
     .stColumn:nth-child(1) {
         background-color: #e1f2ea;
+        padding-top: 20px;
         padding-left: 20px;
         padding-right: 20px;
     }
