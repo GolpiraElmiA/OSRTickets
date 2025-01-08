@@ -183,6 +183,11 @@ st.markdown(
         padding-left: 20px;
         padding-right: 20px;
     }
+    .stColumn:nth-child(2){
+        padding-top: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
     </style>
     """,
     unsafe_allow_html=True
