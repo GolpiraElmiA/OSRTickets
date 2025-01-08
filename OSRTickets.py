@@ -201,7 +201,8 @@ if not st.session_state.df.empty:
             st.write(f"**{status}:** {count} tickets")
 
     with col2:
-        colors=sns.color_palette("pastel", len(department_counts))
+        colors=sns.color_palette("light:#5A9", len(department_counts))
+        st.write(colors)
         st.subheader("Tickets by Department")
         fig, ax = plt.subplots(figsize=(2, 2))
         department_counts.plot(kind="pie", color=colors, labels=department_counts.index, textprops={'fontsize': 4}, ax=ax)
