@@ -67,7 +67,7 @@ if "df" not in st.session_state:
     if 'Name' not in st.session_state.df.columns:
         st.session_state.df['Name'] = ''
     if 'Priority' in st.session_state.df.columns:
-        st.session_state.df.drop (columns=['Priority])
+        st.session_state.df.drop (columns=['Priority'])
 
 # Reset functionality
 def reset_data(password):
@@ -176,25 +176,17 @@ else:
 # Insights section
 if not st.session_state.df.empty:
     df = st.session_state.df
-    priority_counts = df["Priority"].value_counts()
     status_counts = df["Status"].value_counts()
     department_counts = df["Department"].value_counts()
 
     st.header("Ticket Insights")
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
 
     def generate_color_palette(n):
         return sns.color_palette("husl", n)
 
-    with col1:
-        st.subheader("Tickets by Priority")
-        fig, ax = plt.subplots(figsize=(4, 3))
-        priority_counts.plot(kind="bar", color=generate_color_palette(len(priority_counts)), ax=ax)
-        ax.set_title("Priority Distribution")
-        ax.set_ylabel("Count")
-        st.pyplot(fig)
 
-    with col2:
+    with col1:
         st.subheader("Tickets by Status")
         fig, ax = plt.subplots(figsize=(4, 3))
         status_counts.plot(kind="bar", color=generate_color_palette(len(status_counts)), ax=ax)
@@ -202,7 +194,7 @@ if not st.session_state.df.empty:
         ax.set_ylabel("Count")
         st.pyplot(fig)
 
-    with col3:
+    with col2:
         st.subheader("Tickets by Department")
         fig, ax = plt.subplots(figsize=(4, 3))
         department_counts.plot(kind="bar", color=generate_color_palette(len(department_counts)), ax=ax)
