@@ -193,8 +193,8 @@ if not st.session_state.df.empty:
 
     
     st.subheader("Tickets by Department")
-    fig, ax = plt.subplots(figsize=(4, 4))
-    department_counts.plot(kind="pie", color=generate_color_palette(len(department_counts)), labels=department_counts.index, textprops={'fontsize': 12}, ax=ax)
+    fig, ax = plt.subplots(figsize=(2, 2))
+    department_counts.plot(kind="pie", color=generate_color_palette(len(department_counts)), labels=department_counts.index, textprops={'fontsize': 4}, ax=ax)
     ax.set_title("Department Distribution")
     st.pyplot(fig)
 
