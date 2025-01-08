@@ -180,23 +180,22 @@ if not st.session_state.df.empty:
     department_counts = df["Department"].value_counts()
 
     st.header("Ticket Insights")
-    st.subheader("Tickets by Status")
-    
-    # Display the counts
-    for status, count in status_counts.items():
-        st.write(f"**{status}:** {count} tickets")
 
-    
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col1:
+        st.subheader("Tickets by Status")
+        for status, count in status_counts.items():
+            st.write(f"**{status}:** {count} tickets")
 
-    def generate_color_palette(n):
-        return sns.color_palette("pastel", n)
+    with col2:
+        st.subheader("Tickets by Department")
 
+        def generate_color_palette(n):
+            return sns.color_palette("pastel", n)
     
-    st.subheader("Tickets by Department")
-    fig, ax = plt.subplots(figsize=(2, 2))
-    department_counts.plot(kind="pie", color=generate_color_palette(len(department_counts)), labels=department_counts.index, textprops={'fontsize': 4}, ax=ax)
-    ax.set_title("Department Distribution")
-    st.pyplot(fig)
+        fig, ax = plt.subplots(figsize=(2, 2))
+        department_counts.plot(kind="pie", color=generate_color_palette(len(department_counts)), labels=department_counts.index, textprops={'fontsize': 4}, ax=ax)
+        st.pyplot(fig)
 
 # Reset Tickets
 with st.expander("Reset Tickets (Admin Only)"):
