@@ -186,7 +186,7 @@ if not st.session_state.df.empty:
     for status, count in status_counts.items():
         st.write(f"**{status}:** {count} tickets")
 
-    t.subheader("Tickets by Department")
+    st.subheader("Tickets by Department")
     # col1 = st.columns(1)
 
     def generate_color_palette(n):
