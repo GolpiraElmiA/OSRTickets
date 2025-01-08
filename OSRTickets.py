@@ -174,6 +174,17 @@ else:
 
 
 # Insights section
+st.markdown(
+    """
+    <style>
+    .stColumn:nth-child(1) {
+        background-color: blue;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 if not st.session_state.df.empty:
     df = st.session_state.df
     status_counts = df["Status"].value_counts()
