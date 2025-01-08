@@ -58,7 +58,7 @@ def load_data():
         request = drive_service.files().get_media(fileId=file_id)
         data = request.execute()
         return pd.read_csv(io.BytesIO(data))
-    return pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Department", "Status", "Priority", "Date Submitted", "Summary"])
+    return pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Department", "Status", "Date Submitted", "Summary"])
 
 # Initialize or load data into session state
 if "df" not in st.session_state:
@@ -66,12 +66,14 @@ if "df" not in st.session_state:
     # Ensure the 'Name' column exists
     if 'Name' not in st.session_state.df.columns:
         st.session_state.df['Name'] = ''
+    if 'Priority' in st.session_state.df.columns:
+        st.session_state.df.drop (columns=['Priority])
 
 # Reset functionality
 def reset_data(password):
     correct_password = "reset123"  # Replace with a secure password
     if password == correct_password:
-        st.session_state.df = pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Department", "Status", "Priority", "Date Submitted", "Summary"])
+        st.session_state.df = pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Department", "Status", "Date Submitted", "Summary"])
         save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
         return True
     return False
@@ -96,7 +98,6 @@ with st.form("add_ticket_form"):
     department = st.selectbox("Department", departments)
     email = st.text_area("Email Address", placeholder="Enter your email address here...")
     issue = st.text_area("Description of the Issue", placeholder="Briefly describe the work or issue you're submitting.")
-    priority = st.selectbox("Priority Level", ["High", "Medium", "Low"])
     date_submitted = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     summary = issue[:5000]  # Create a brief summary (first 5000 characters)
 
@@ -110,7 +111,6 @@ with st.form("add_ticket_form"):
             "Email": email,
             "Department": department,
             "Status": "Open",
-            "Priority": priority,
             "Date Submitted": date_submitted,
             "Summary": summary,
         }
