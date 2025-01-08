@@ -184,6 +184,8 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+def generate_color_palette(n):
+    return sns.color_palette("light:#5A9", n)
 
 if not st.session_state.df.empty:
     df = st.session_state.df
@@ -200,10 +202,6 @@ if not st.session_state.df.empty:
 
     with col2:
         st.subheader("Tickets by Department")
-
-        def generate_color_palette(n):
-            return sns.color_palette("light:#5A9", n)
-    
         fig, ax = plt.subplots(figsize=(2, 2))
         department_counts.plot(kind="pie", color=generate_color_palette(len(department_counts)), labels=department_counts.index, textprops={'fontsize': 4}, ax=ax)
         ax.set_ylabel('')
