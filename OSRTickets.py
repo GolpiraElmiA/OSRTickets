@@ -66,8 +66,8 @@ if "df" not in st.session_state:
     # Ensure the 'Name' column exists
     # if 'Name' not in st.session_state.df.columns:
     #     st.session_state.df['Name'] = ''
-    if 'Priority' in st.session_state.df.columns:
-        st.session_state.df.drop (columns=['Priority'], inplace=True)
+    # if 'Priority' in st.session_state.df.columns:
+    #     st.session_state.df.drop (columns=['Priority'], inplace=True)
 
 # Reset functionality
 def reset_data(password):
@@ -180,24 +180,22 @@ if not st.session_state.df.empty:
     department_counts = df["Department"].value_counts()
 
     st.header("Ticket Insights")
-    col1, col2 = st.columns(2)
+    st.subheader("Tickets by Status")
+    
+    # Display the counts
+    for status, count in status_counts.items():
+        st.write(f"**{status}:** {count} tickets")
+
+    
+    col1 = st.columns(1)
 
     def generate_color_palette(n):
         return sns.color_palette("husl", n)
 
-
     with col1:
-        st.subheader("Tickets by Status")
-        fig, ax = plt.subplots(figsize=(4, 3))
-        status_counts.plot(kind="bar", color=generate_color_palette(len(status_counts)), ax=ax)
-        ax.set_title("Status Distribution")
-        ax.set_ylabel("Count")
-        st.pyplot(fig)
-
-    with col2:
         st.subheader("Tickets by Department")
         fig, ax = plt.subplots(figsize=(4, 3))
-        department_counts.plot(kind="bar", color=generate_color_palette(len(department_counts)), ax=ax)
+        department_counts.plot(kind="pie", color=generate_color_palette(len(department_counts)), labels=department_counts.index, ax=ax)
         ax.set_title("Department Distribution")
         ax.set_ylabel("Count")
         st.pyplot(fig)
