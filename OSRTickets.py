@@ -184,15 +184,14 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-# def generate_color_palette(n):
-#     return sns.color_palette("light:#5A9", n)
+
 
 if not st.session_state.df.empty:
     df = st.session_state.df
     status_counts = df["Status"].value_counts()
     department_counts = df["Department"].value_counts()
 
-    # st.header("Ticket Insights")
+    #################### st.header("Ticket Insights")####################
 
     col1, col2 = st.columns([1, 1])
     with col1:
@@ -202,10 +201,9 @@ if not st.session_state.df.empty:
 
     with col2:
         colors=sns.color_palette("light:#5A9", len(department_counts))
-        st.write(colors)
         st.subheader("Tickets by Department")
         fig, ax = plt.subplots(figsize=(2, 2))
-        department_counts.plot(kind="pie", color=colors, labels=department_counts.index, textprops={'fontsize': 4}, ax=ax)
+        department_counts.plot(kind="pie", colors=colors, labels=department_counts.index, textprops={'fontsize': 4}, ax=ax)
         ax.set_ylabel('')
         st.pyplot(fig)
 
