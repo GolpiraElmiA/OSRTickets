@@ -179,9 +179,9 @@ if not st.session_state.df.empty:
     status_counts = df["Status"].value_counts()
     department_counts = df["Department"].value_counts()
 
-    st.header("Ticket Insights")
+    # st.header("Ticket Insights")
 
-    col1, col2, col3 = st.columns([1, 1, 1])
+    col1, col2 = st.columns([1, 1])
     with col1:
         st.subheader("Tickets by Status")
         for status, count in status_counts.items():
@@ -195,6 +195,7 @@ if not st.session_state.df.empty:
     
         fig, ax = plt.subplots(figsize=(2, 2))
         department_counts.plot(kind="pie", color=generate_color_palette(len(department_counts)), labels=department_counts.index, textprops={'fontsize': 4}, ax=ax)
+        ax.set_ylabel('')
         st.pyplot(fig)
 
 # Reset Tickets
