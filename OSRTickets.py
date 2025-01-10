@@ -134,11 +134,7 @@ def color_status(val):
         return 'color: green'
     return ''
 
-# Apply the color formatting function to the 'Status' column
-styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
 
-# Display the styled DataFrame
-st.dataframe(styled_df, use_container_width=True)
 ################
 
 # Use st.data_editor for inline editing of the DataFrame
@@ -160,8 +156,14 @@ if password_input == "reset123":
         save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
         st.success("Tickets updated successfully!")
 
-    # Display the tickets and allow status updates
-    status_options = ["Open", "Closed", "In Progress"]  # Replace with actual status options
+    # # Display the tickets and allow status updates
+    # status_options = ["Open", "Closed", "In Progress"]  # Replace with actual status options
+
+    # Apply the color formatting function to the 'Status' column
+    styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
+    
+    # Display the styled DataFrame
+    st.dataframe(styled_df, use_container_width=True)
 
     for idx, row in st.session_state.df.iterrows():
         col1, col2, col3, col4 = st.columns([1, 1, 1, 1])  # Create columns for each section
