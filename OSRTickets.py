@@ -64,10 +64,6 @@ def load_data():
 if "df" not in st.session_state:
     st.session_state.df = load_data()
     # Ensure the 'Name' column exists
-    # if 'Name' not in st.session_state.df.columns:
-    #     st.session_state.df['Name'] = ''
-    # if 'Priority' in st.session_state.df.columns:
-    #     st.session_state.df.drop (columns=['Priority'], inplace=True)
 
 # Reset functionality
 def reset_data(password):
@@ -192,7 +188,7 @@ if password_input == "reset123":
 else:
     # Display the table without editing capabilities if password is incorrect or not entered
     st.write("You must enter the correct password to edit the table.")
-    st.dataframe(st.session_state.df)
+    # st.dataframe(st.session_state.df)
 
 
 
