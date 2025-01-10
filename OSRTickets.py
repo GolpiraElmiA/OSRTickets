@@ -121,6 +121,26 @@ with st.form("add_ticket_form"):
 # Display Ticket Table
 st.subheader("Submitted Tickets")
 
+###############
+# Remove 'Priority' column if it exists
+if 'Priority' in st.session_state.df.columns:
+    st.session_state.df.drop(columns=['Priority'], inplace=True)
+
+# Function to apply color formatting to the 'Status' column
+def color_status(val):
+    if val == 'In Progress':
+        return 'color: blue'
+    elif val == 'Open':
+        return 'color: green'
+    return ''
+
+# Apply the color formatting function to the 'Status' column
+styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
+
+# Display the styled DataFrame
+st.dataframe(styled_df, use_container_width=True)
+################
+
 # Use st.data_editor for inline editing of the DataFrame
 # Password input for table editing
 password_input = st.text_input("Enter password to enable ticket edits", type="password")
