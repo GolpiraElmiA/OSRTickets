@@ -135,10 +135,10 @@ def color_status(val):
     return ''
 
 # Apply the color formatting function to the 'Status' column
-    styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
-    
-    # Display the styled DataFrame
-    st.dataframe(styled_df, use_container_width=True)
+styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
+
+# Display the styled DataFrame
+st.dataframe(styled_df, use_container_width=True)
 
 ################
 
