@@ -163,6 +163,8 @@ if password_input == "reset123":
     ################################# 31 Jan 2025
     st.subheader("To Do")
     df = st.session_state.df 
+    st.session_state.df["Status"] = st.session_state.df["Status"].str.strip().str.title()
+
     df_todo = df[df["Status"].isin(["In Progress", "Open"])]
     st.dataframe(df_todo, use_container_width=True)
 
