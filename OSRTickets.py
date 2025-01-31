@@ -163,31 +163,7 @@ if password_input == "reset123":
         st.success("In Progress/Open tickets updated successfully!")
 
 
-    # Display the tickets and allow status updates
-    status_options = ["Open", "In Progress", "Completed"]  # Replace with actual status options
-
-    for idx, row in st.session_state.df.iterrows():
-        col1, col2, col3, col4 = st.columns([1, 1, 1, 1])  # Create columns for each section
-
-        with col1:
-            st.write(f"Ticket ID: {row['ID']}")
-        
-        with col2:
-            st.write(f"Name: {row['Name']}")
-
-        with col3:
-            status = st.selectbox(
-                label="Status", 
-                options=status_options, 
-                index=status_options.index(row['Status']),
-                key=f"status_{row['ID']}"
-            )
-        
-        with col4:
-            if st.button(f"Update Status for Ticket {row['ID']}", key=f"update_{row['ID']}"):
-                st.session_state.df.at[idx, 'Status'] = status
-                save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
-                st.success(f"Status for Ticket {row['ID']} has been updated to {status}")
+   
 
 else:
     # Display the table without editing capabilities if password is incorrect or not entered
