@@ -157,9 +157,9 @@ if password_input == "reset123":
 
     # Check if edits were made
     if not edited_df_todo.equals(df_todo):
-    df.update(edited_df_todo)  # Update the main DataFrame
-    save_to_drive(df, 'StatisticalAnalysisTickets.csv')
-    st.success("In Progress/Open tickets updated successfully!")
+        df.update(edited_df_todo)  # Update the main DataFrame
+        save_to_drive(df, 'StatisticalAnalysisTickets.csv')
+        st.success("In Progress/Open tickets updated successfully!")
 
     # # Display the tickets and allow status updates
     # status_options = ["Open", "Closed", "In Progress"]  # Replace with actual status options
