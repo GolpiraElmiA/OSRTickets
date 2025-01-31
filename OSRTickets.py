@@ -141,8 +141,6 @@ df_todo = df[df["Status"].isin(["In Progress", "Open"])]
 st.dataframe(df_todo.style.applymap(color_status, subset=['Status']), use_container_width=True)
 ###################################
 
-
-# Use st.data_editor for inline editing of the DataFrame
 # Password input for table editing
 password_input = st.text_input("Enter password to enable ticket edits", type="password")
 
