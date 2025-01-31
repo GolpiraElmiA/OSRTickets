@@ -133,6 +133,29 @@ def color_status(val):
 # Apply the color formatting function to the 'Status' column
 styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
 
+################################# 31 Jan 2025
+# Apply CSS to prevent vertical scrolling and adjust table height
+st.markdown(
+    """
+    <style>
+    .stDataFrame {
+        height: auto !important;  # Allow height to grow dynamically with content
+        overflow-y: visible !important;  # Prevent vertical scrolling
+    }
+    .dataframe td {
+        white-space: normal;  # Ensure text wraps
+        word-wrap: break-word;  # Allow breaking words within long text
+    }
+    .dataframe th {
+        text-align: left;  # Align headers to the left
+        padding-left: 10px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+###################################
+
 # Display the styled DataFrame
 st.dataframe(styled_df, use_container_width=True)
 
