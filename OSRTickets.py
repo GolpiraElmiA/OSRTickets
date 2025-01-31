@@ -147,16 +147,16 @@ password_input = st.text_input("Enter password to enable ticket edits", type="pa
 if password_input == "reset123":
     # Allow editing if the password is correct
     status_options = ["Open", "In Progress", "Completed"]
-    edited_df = st.data_editor(
-        st.session_state.df,
+    edited_df_todo = st.data_editor(
+        df_todo,
         use_container_width=True,
         num_rows="dynamic",
         key="tickets_table"
     )
 
     # Save the edits to session state and Google Drive
-    if not edited_df.equals(st.session_state.df):
-        st.session_state.df = edited_df
+    if not edited_df_todo.equals(df_todo):
+        st.session_state.df.update(edited_df_todo)
         save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
         st.success("Tickets updated successfully!")
 
