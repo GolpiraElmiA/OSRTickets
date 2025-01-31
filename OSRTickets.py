@@ -134,26 +134,6 @@ def color_status(val):
 styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
 
 ################################# 31 Jan 2025
-# Convert DataFrame to HTML and add custom CSS for no vertical scroll
-html_table = st.session_state.df.to_html(classes='table table-bordered', escape=False)
-
-# Apply custom CSS to remove vertical scrolling
-st.markdown(
-    """
-    <style>
-    .table {
-        overflow-y: visible !important;  /* Prevent vertical scrolling */
-        max-height: none !important;  /* No max height */
-    }
- 
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# Display the HTML table
-st.markdown(html_table, unsafe_allow_html=True)
-
 ###################################
 
 # Display the styled DataFrame
