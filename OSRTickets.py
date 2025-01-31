@@ -151,13 +151,7 @@ if password_input == "reset123":
         st.session_state.df,
         use_container_width=True,
         num_rows="dynamic",
-        key="tickets_table",
-        column_config={
-        "Status": st.column_config.SelectboxColumn(
-            "Status",
-            options=status_options
-        )
-    }
+        key="tickets_table"
     )
 
     # Save the edits to session state and Google Drive
