@@ -115,7 +115,7 @@ with st.form("add_ticket_form"):
         st.success(f"Ticket {ticket_id} has been submitted successfully!")
 
 # Display Ticket Table
-st.subheader("Submitted Tickets")
+st.subheader("_________________________")
 
 ###############
 # Function to apply color formatting to the 'Status' column
