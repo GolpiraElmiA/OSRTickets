@@ -146,7 +146,7 @@ password_input = st.text_input("Enter password to enable ticket edits", type="pa
 
 if password_input == "reset123":
     # Allow editing only for 'Open' and 'In Progress' tickets
-    status_options = ["Open", "In Progress", "Completed"]
+    # status_options = ["Open", "In Progress", "Completed"]
     
     # Filter df_todo for editing
     edited_df_todo = st.data_editor(
@@ -162,21 +162,9 @@ if password_input == "reset123":
         save_to_drive(df, 'StatisticalAnalysisTickets.csv')
         st.success("In Progress/Open tickets updated successfully!")
 
-    # Status Update Section (outside the data_editor)
-    for idx, row in edited_df_todo.iterrows():
-        status = st.selectbox(
-            label=f"Status for Ticket {row['ID']}", 
-            options=status_options, 
-            index=status_options.index(row['Status']),
-            key=f"status_{row['ID']}"
-        )
-        if st.button(f"Update Status for Ticket {row['ID']}", key=f"update_{row['ID']}"):
-            st.session_state.df.at[idx, 'Status'] = status
-            save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
-            st.success(f"Status for Ticket {row['ID']} has been updated to {status}")
 
     # Display the tickets and allow status updates
-    status_options = ["Open", "In Progress"]  # Replace with actual status options
+ #   status_options = ["Open", "In Progress"]  # Replace with actual status options
 
     for idx, row in st.session_state.df.iterrows():
         col1, col2, col3, col4 = st.columns([1, 1, 1, 1])  # Create columns for each section
