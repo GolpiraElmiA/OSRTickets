@@ -164,7 +164,7 @@ if password_input == "reset123":
 
 
     # Display the tickets and allow status updates
- #   status_options = ["Open", "In Progress"]  # Replace with actual status options
+    status_options = ["Open", "In Progress", "Completed"]  # Replace with actual status options
 
     for idx, row in st.session_state.df.iterrows():
         col1, col2, col3, col4 = st.columns([1, 1, 1, 1])  # Create columns for each section
