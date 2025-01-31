@@ -146,11 +146,18 @@ password_input = st.text_input("Enter password to enable ticket edits", type="pa
 
 if password_input == "reset123":
     # Allow editing if the password is correct
+    status_options = ["Open", "In Progress", "Completed"]
     edited_df = st.data_editor(
-        st.session_state.df.copy(),
+        st.session_state.df,
         use_container_width=True,
         num_rows="dynamic",
         key="tickets_table",
+        column_config={
+        "Status": st.column_config.SelectboxColumn(
+            "Status",
+            options=status_options
+        )
+    }
     )
 
     # Save the edits to session state and Google Drive
