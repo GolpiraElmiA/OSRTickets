@@ -147,10 +147,7 @@ st.markdown(
         overflow-y: visible !important;  /* Prevent vertical scrolling */
         max-height: none !important;  /* No max height */
     }
-    .table th, .table td {
-        white-space: normal !important;  /* Ensure text wraps */
-        word-wrap: break-word;  /* Allow word breaking */
-    }
+ 
     </style>
     """,
     unsafe_allow_html=True
