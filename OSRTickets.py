@@ -138,7 +138,7 @@ st.dataframe(styled_df, use_container_width=True)
 
 ################################# 31 Jan 2025
 st.subheader("To Do")
-#df = st.session_state.df 
+df = st.session_state.df 
 st.session_state.df["Status"] = st.session_state.df["Status"].str.strip().str.title()
 
 df_todo = df[df["Status"].isin(["In Progress", "Open"])]
