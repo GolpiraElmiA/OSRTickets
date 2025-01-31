@@ -119,8 +119,8 @@ st.subheader("Submitted Tickets")
 
 ###############
 # Remove 'Priority' column if it exists
-if 'Priority' in st.session_state.df.columns:
-    st.session_state.df.drop(columns=['Priority'], inplace=True)
+#if 'Priority' in st.session_state.df.columns:
+  #  st.session_state.df.drop(columns=['Priority'], inplace=True)
 
 # Function to apply color formatting to the 'Status' column
 def color_status(val):
@@ -134,12 +134,17 @@ def color_status(val):
 styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
 
 # Display the styled DataFrame
-st.dataframe(styled_df, use_container_width=True)
+#st.dataframe(styled_df, use_container_width=True)
 
 ################################# 31 Jan 2025
-st.subheader("To Do")
-df = st.session_state.df 
+st.subheader("Completed")
+df = st.session_state.df
 st.session_state.df["Status"] = st.session_state.df["Status"].str.strip().str.title()
+df_completed=df[df["Status"].isin(["Completed"])]
+st.dataframe(df_completed, use_container_width=True)
+
+st.subheader("To Do")
+
 
 df_todo = df[df["Status"].isin(["In Progress", "Open"])]
 st.dataframe(df_todo.style.applymap(color_status, subset=['Status']), use_container_width=True)
