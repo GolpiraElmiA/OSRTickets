@@ -150,7 +150,7 @@ if password_input == "reset123":
     
     # Filter df_todo for editing
     edited_df_todo = st.data_editor(
-        df_todo,
+        df,
         use_container_width=True,
         num_rows="dynamic",
         key="todo_tickets_table"
