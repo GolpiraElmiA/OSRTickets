@@ -136,7 +136,17 @@ styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
 # Display the styled DataFrame
 st.dataframe(styled_df, use_container_width=True)
 
-################
+################################# 31 Jan 2025
+st.subheader("To Do")
+#df = st.session_state.df 
+st.session_state.df["Status"] = st.session_state.df["Status"].str.strip().str.title()
+
+df_todo = df[df["Status"].isin(["In Progress", "Open"])]
+st.write("Rows matching condition:", len(df_todo))
+st.dataframe(df_todo, use_container_width=True)
+
+###################################
+
 
 # Use st.data_editor for inline editing of the DataFrame
 # Password input for table editing
@@ -159,17 +169,6 @@ if password_input == "reset123":
 
     # # Display the tickets and allow status updates
     # status_options = ["Open", "Closed", "In Progress"]  # Replace with actual status options
-
-    ################################# 31 Jan 2025
-    st.subheader("To Do")
-    #df = st.session_state.df 
-    st.session_state.df["Status"] = st.session_state.df["Status"].str.strip().str.title()
-
-    df_todo = df[df["Status"].isin(["In Progress", "Open"])]
-    st.write("Rows matching condition:", len(df_todo))
-    st.dataframe(df_todo, use_container_width=True)
-
-    ###################################
 
     for idx, row in st.session_state.df.iterrows():
         col1, col2, col3, col4 = st.columns([1, 1, 1, 1])  # Create columns for each section
