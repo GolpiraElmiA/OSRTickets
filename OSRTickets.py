@@ -145,9 +145,10 @@ st.dataframe(df_todo.style.applymap(color_status, subset=['Status']), use_contai
 password_input = st.text_input("Enter password to enable ticket edits", type="password")
 
 if password_input == "reset123":
-    # Allow editing if the password is correct
-    df_todo = df[df["Status"].isin(["In Progress", "Open"])]
-
+    # Allow editing only for 'Open' and 'In Progress' tickets
+    status_options = ["Open", "In Progress", "Completed"]
+    
+    # Filter df_todo for editing
     edited_df_todo = st.data_editor(
         df_todo,
         use_container_width=True,
@@ -155,11 +156,24 @@ if password_input == "reset123":
         key="todo_tickets_table"
     )
 
-    # Check if edits were made
+    # Update only df_todo in the session state and save changes to Google Drive
     if not edited_df_todo.equals(df_todo):
         df.update(edited_df_todo)  # Update the main DataFrame
         save_to_drive(df, 'StatisticalAnalysisTickets.csv')
         st.success("In Progress/Open tickets updated successfully!")
+
+    # Status Update Section (outside the data_editor)
+    for idx, row in edited_df_todo.iterrows():
+        status = st.selectbox(
+            label=f"Status for Ticket {row['ID']}", 
+            options=status_options, 
+            index=status_options.index(row['Status']),
+            key=f"status_{row['ID']}"
+        )
+        if st.button(f"Update Status for Ticket {row['ID']}", key=f"update_{row['ID']}"):
+            st.session_state.df.at[idx, 'Status'] = status
+            save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
+            st.success(f"Status for Ticket {row['ID']} has been updated to {status}")
 
     # Display the tickets and allow status updates
     status_options = ["Open", "Closed", "In Progress"]  # Replace with actual status options
