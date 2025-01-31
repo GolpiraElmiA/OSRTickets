@@ -161,8 +161,8 @@ if password_input == "reset123":
         save_to_drive(df, 'StatisticalAnalysisTickets.csv')
         st.success("In Progress/Open tickets updated successfully!")
 
-    # # Display the tickets and allow status updates
-    # status_options = ["Open", "Closed", "In Progress"]  # Replace with actual status options
+    # Display the tickets and allow status updates
+    status_options = ["Open", "Closed", "In Progress"]  # Replace with actual status options
 
     for idx, row in st.session_state.df.iterrows():
         col1, col2, col3, col4 = st.columns([1, 1, 1, 1])  # Create columns for each section
