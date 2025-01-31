@@ -134,26 +134,31 @@ def color_status(val):
 styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
 
 ################################# 31 Jan 2025
-# Apply CSS to prevent vertical scrolling and adjust table height
+# Convert DataFrame to HTML and add custom CSS for no vertical scroll
+html_table = st.session_state.df.to_html(classes='table table-bordered', escape=False)
+
+# Apply custom CSS to remove vertical scrolling
 st.markdown(
     """
     <style>
-    .stDataFrame {
-        height: auto !important;  # Allow height to grow dynamically with content
-        overflow-y: visible !important;  # Prevent vertical scrolling
+    .table {
+        width: 100% !important;
+        table-layout: auto !important;  /* Adjust table layout */
+        overflow-y: visible !important;  /* Prevent vertical scrolling */
+        max-height: none !important;  /* No max height */
     }
-    .dataframe td {
-        white-space: normal;  # Ensure text wraps
-        word-wrap: break-word;  # Allow breaking words within long text
-    }
-    .dataframe th {
-        text-align: left;  # Align headers to the left
-        padding-left: 10px;
+    .table th, .table td {
+        white-space: normal !important;  /* Ensure text wraps */
+        word-wrap: break-word;  /* Allow word breaking */
     }
     </style>
     """,
     unsafe_allow_html=True
 )
+
+# Display the HTML table
+st.markdown(html_table, unsafe_allow_html=True)
+
 ###################################
 
 # Display the styled DataFrame
