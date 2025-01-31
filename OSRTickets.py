@@ -147,7 +147,7 @@ password_input = st.text_input("Enter password to enable ticket edits", type="pa
 if password_input == "reset123":
     # Allow editing if the password is correct
     edited_df = st.data_editor(
-        st.session_state.df,
+        st.session_state.df.copy(),
         use_container_width=True,
         num_rows="dynamic",
         key="tickets_table",
