@@ -142,7 +142,7 @@ df = st.session_state.df
 st.session_state.df["Status"] = st.session_state.df["Status"].str.strip().str.title()
 
 df_todo = df[df["Status"].isin(["In Progress", "Open"])]
-st.write("Rows matching condition:", len(df_todo))
+st.session_state.df_todo.style.applymap(color_status, subset=['Status'])
 st.dataframe(df_todo, use_container_width=True)
 
 ###################################
