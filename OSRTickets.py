@@ -142,7 +142,7 @@ st.markdown(
     """
     <style>
     .table {
-        width: 100% !important;
+       
         table-layout: auto !important;  /* Adjust table layout */
         overflow-y: visible !important;  /* Prevent vertical scrolling */
         max-height: none !important;  /* No max height */
