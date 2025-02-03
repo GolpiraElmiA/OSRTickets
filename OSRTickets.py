@@ -83,7 +83,7 @@ st.subheader("Submit a Support Ticket")
 departments = [
     "Dentistry and Oral Health", "Ophthalmology", "Orthopaedic", "Pediatric Surgery", 
     "Podiatry", "Transplant Surgery", "Vascular Surgery", "General Surgery",
-    "Oral and Maxillofacial", "Otolaryngology", "Plastic Surgery", 
+    "Oral and Maxillofacial", "Oncology","Otolaryngology", "Plastic Surgery", 
     "Thoracic Surgery", "Urology"
 ]
 
