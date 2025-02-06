@@ -134,6 +134,7 @@ styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
 ################################# 31 Jan 2025
 st.subheader("Completed Tickets")
 df = st.session_state.df
+df.rename(columns={"Department": "Section"}, inplace=True)
 st.session_state.df["Status"] = st.session_state.df["Status"].str.strip().str.title()
 df_completed=df[df["Status"].isin(["Completed"])]
 st.dataframe(df_completed, use_container_width=True)
@@ -196,7 +197,7 @@ st.markdown(
 
 
 if not st.session_state.df.empty:
-    df.rename(columns={"Department": "Section"}, inplace=True)
+    # df.rename(columns={"Department": "Section"}, inplace=True)
     df = st.session_state.df
     status_counts = df["Status"].value_counts()
     section_counts = df["Section"].value_counts()
