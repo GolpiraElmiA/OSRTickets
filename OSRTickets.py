@@ -81,7 +81,7 @@ st.header("Statistical Support Request Form")
 # Ticket Form
 st.subheader("Submit a Support Ticket")
 departments = [
-    "Dentistry and Oral Health", "Ophthalmology", "Orthopaedic", "Pediatric Surgery", 
+    "Dentistry and Oral Health", "Ophthalmology", "Orthopaedic","Orthopaedic Trauma (Dr Schneider's Group)", "Pediatric Surgery", 
     "Podiatry", "Transplant Surgery", "Vascular Surgery", "General Surgery",
     "Oral and Maxillofacial", "Oncology","Otolaryngology", "Plastic Surgery", 
     "Thoracic Surgery", "Urology"
@@ -91,7 +91,7 @@ departments = [
 with st.form("add_ticket_form"):
     name = st.text_area("Name", placeholder="Please enter your full name here")
     request_type = st.selectbox("Request Type", ["New", "Follow-up"])
-    department = st.selectbox("Department", departments)
+    department = st.selectbox("Sections", departments)
     email = st.text_area("Email Address", placeholder="Enter your email address here...")
     issue = st.text_area("Description of the Issue", placeholder="Briefly describe the work or issue you're submitting.")
     date_submitted = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
