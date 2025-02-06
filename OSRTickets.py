@@ -63,6 +63,7 @@ def load_data():
 # Initialize or load data into session state
 if "df" not in st.session_state:
     st.session_state.df = load_data()
+    df.rename(columns={"Department": "Section"}, inplace=True)
     # Ensure the 'Name' column exists
 
 # Reset functionality
@@ -196,7 +197,7 @@ st.markdown(
 if not st.session_state.df.empty:
     df = st.session_state.df
     status_counts = df["Status"].value_counts()
-    section_counts = df["section"].value_counts()
+    section_counts = df["Section"].value_counts()
 
     #################### st.header("Ticket Insights")####################
 
