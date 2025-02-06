@@ -80,7 +80,7 @@ st.header("Statistical Support Request Form")
 
 # Ticket Form
 st.subheader("Submit a Support Ticket")
-departments = [
+sections = [
     "Dentistry and Oral Health", "Ophthalmology", "Orthopaedic","Dr Schneider's Group", "Pediatric Surgery", 
     "Podiatry", "Transplant Surgery", "Vascular Surgery", "General Surgery",
     "Oral and Maxillofacial", "Oncology","Otolaryngology", "Plastic Surgery", 
@@ -91,7 +91,7 @@ departments = [
 with st.form("add_ticket_form"):
     name = st.text_area("Name", placeholder="Please enter your full name here")
     request_type = st.selectbox("Request Type", ["New", "Follow-up"])
-    department = st.selectbox("Sections", departments)
+    section = st.selectbox("Sections", sections)
     email = st.text_area("Email Address", placeholder="Enter your email address here...")
     issue = st.text_area("Description of the Issue", placeholder="Briefly describe the work or issue you're submitting.")
     date_submitted = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -105,7 +105,7 @@ with st.form("add_ticket_form"):
             "Name": name,
             "Request Type": request_type,
             "Email": email,
-            "Department": department,
+            "Section": sections,
             "Status": "Open",
             "Date Submitted": date_submitted,
             "Summary": summary,
@@ -196,7 +196,7 @@ st.markdown(
 if not st.session_state.df.empty:
     df = st.session_state.df
     status_counts = df["Status"].value_counts()
-    department_counts = df["Department"].value_counts()
+    section_counts = df["Section"].value_counts()
 
     #################### st.header("Ticket Insights")####################
 
@@ -207,10 +207,10 @@ if not st.session_state.df.empty:
             st.write(f"**{status}:** {count} tickets")
 
     with col2:
-        colors=sns.color_palette("light:#5A9", len(department_counts))
-        st.subheader("Tickets by Department")
+        colors=sns.color_palette("light:#5A9", len(section_counts))
+        st.subheader("Tickets by Section")
         fig, ax = plt.subplots(figsize=(2, 2))
-        department_counts.plot(kind="pie", colors=colors, labels=department_counts.index, textprops={'fontsize': 4}, ax=ax)
+        section_counts.plot(kind="pie", colors=colors, labels=section_counts.index, textprops={'fontsize': 4}, ax=ax)
         ax.set_ylabel('')
         st.pyplot(fig)
 
