@@ -196,6 +196,7 @@ st.markdown(
 
 
 if not st.session_state.df.empty:
+    df.rename(columns={"Department": "Section"}, inplace=True)
     df = st.session_state.df
     status_counts = df["Status"].value_counts()
     section_counts = df["Section"].value_counts()
