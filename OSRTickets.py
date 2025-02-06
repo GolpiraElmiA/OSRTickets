@@ -58,7 +58,7 @@ def load_data():
         request = drive_service.files().get_media(fileId=file_id)
         data = request.execute()
         return pd.read_csv(io.BytesIO(data))
-    return pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Department", "Status", "Date Submitted", "Summary"])
+    return pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"])
 
 # Initialize or load data into session state
 if "df" not in st.session_state:
@@ -69,7 +69,7 @@ if "df" not in st.session_state:
 def reset_data(password):
     correct_password = "reset123"  # Replace with a secure password
     if password == correct_password:
-        st.session_state.df = pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Department", "Status", "Date Submitted", "Summary"])
+        st.session_state.df = pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"])
         save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
         return True
     return False
