@@ -219,14 +219,14 @@ if not st.session_state.df.empty:
         kind="barh",  # Change to horizontal bar chart
         color=colors,
         ax=ax
-    )
+        )
+        
+        ax.set_xlabel("Count")  # Label x-axis
+        ax.set_ylabel("Section")  # Label y-axis
+        ax.tick_params(axis='x', labelsize=6)  # Adjust x-axis font size
+        ax.tick_params(axis='y', labelsize=6)  # Adjust y-axis font size
     
-    ax.set_xlabel("Count")  # Label x-axis
-    ax.set_ylabel("Section")  # Label y-axis
-    ax.tick_params(axis='x', labelsize=6)  # Adjust x-axis font size
-    ax.tick_params(axis='y', labelsize=6)  # Adjust y-axis font size
-    
-    st.pyplot(fig)
+        st.pyplot(fig)
         # colors=sns.color_palette("light:#5A9", len(section_counts))
         # st.subheader("Tickets by Section")
         # fig, ax = plt.subplots(figsize=(2, 2))
