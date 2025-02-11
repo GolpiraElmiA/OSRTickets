@@ -211,12 +211,28 @@ if not st.session_state.df.empty:
             st.write(f"**{status}:** {count} tickets")
 
     with col2:
-        colors=sns.color_palette("light:#5A9", len(section_counts))
+        colors = sns.color_palette("light:#5A9", len(section_counts))
         st.subheader("Tickets by Section")
-        fig, ax = plt.subplots(figsize=(2, 2))
-        section_counts.plot(kind="pie", colors=colors, labels=section_counts.index, textprops={'fontsize': 2}, ax=ax)
-        ax.set_ylabel('')
-        st.pyplot(fig)
+    
+        fig, ax = plt.subplots(figsize=(4, 2))  # Adjust figure size if needed
+        section_counts.plot(
+        kind="barh",  # Change to horizontal bar chart
+        color=colors,
+        ax=ax
+    )
+    
+    ax.set_xlabel("Count")  # Label x-axis
+    ax.set_ylabel("Section")  # Label y-axis
+    ax.tick_params(axis='x', labelsize=6)  # Adjust x-axis font size
+    ax.tick_params(axis='y', labelsize=6)  # Adjust y-axis font size
+    
+    st.pyplot(fig)
+        # colors=sns.color_palette("light:#5A9", len(section_counts))
+        # st.subheader("Tickets by Section")
+        # fig, ax = plt.subplots(figsize=(2, 2))
+        # section_counts.plot(kind="pie", colors=colors, labels=section_counts.index, textprops={'fontsize': 2}, ax=ax)
+        # ax.set_ylabel('')
+        # st.pyplot(fig)
 
 # Reset Tickets
 with st.expander("Reset Tickets (Admin Only)"):
