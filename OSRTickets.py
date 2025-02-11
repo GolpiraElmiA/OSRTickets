@@ -161,8 +161,13 @@ if password_input == "reset123":
 
     # Update only df_todo in the session state and save changes to Google Drive
     if not edited_df_todo.equals(df_todo):
-        df.update(edited_df_todo)  # Update the main DataFrame
-        save_to_drive(df, 'StatisticalAnalysisTickets.csv')
+        # df.update(edited_df_todo)  # Update the main DataFrame
+        # save_to_drive(df, 'StatisticalAnalysisTickets.csv')
+        # st.success("In Progress/Open tickets updated successfully!")
+        st.session_state.df = st.session_state.df[~st.session_state.df["ID"].isin(df_todo["ID"])]  # Remove old 'df_todo' entries
+        st.session_state.df = pd.concat([st.session_state.df, edited_df_todo], ignore_index=True)  # Add updated rows
+    
+        save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
         st.success("In Progress/Open tickets updated successfully!")
 
 
