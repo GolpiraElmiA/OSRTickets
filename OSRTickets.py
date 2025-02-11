@@ -148,27 +148,41 @@ st.dataframe(df_todo.style.applymap(color_status, subset=['Status']), use_contai
 password_input = st.text_input("Enter password to enable ticket edits", type="password")
 
 if password_input == "reset123":
-    # Allow editing only for 'Open' and 'In Progress' tickets
-    # status_options = ["Open", "In Progress", "Completed"]
-    
-    # Filter df_todo for editing
-    edited_df_todo = st.data_editor(
-        df,
+    edited_df = st.data_editor(
+        st.session_state.df,  # Make sure you're editing the whole DataFrame
         use_container_width=True,
         num_rows="dynamic",
         key="todo_tickets_table"
     )
 
-    # Update only df_todo in the session state and save changes to Google Drive
-    if not edited_df_todo.equals(df_todo):
-        # df.update(edited_df_todo)  # Update the main DataFrame
-        # save_to_drive(df, 'StatisticalAnalysisTickets.csv')
-        # st.success("In Progress/Open tickets updated successfully!")
-        st.session_state.df = st.session_state.df[~st.session_state.df["ID"].isin(df_todo["ID"])]  # Remove old 'df_todo' entries
-        st.session_state.df = pd.concat([st.session_state.df, edited_df_todo], ignore_index=True)  # Add updated rows
+    # Check if changes were made
+    if not edited_df.equals(st.session_state.df):
+        st.session_state.df = edited_df  # Save changes in session state
+        save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')  # Save to Google Drive
+        st.success("Tickets updated successfully!")
+
+# if password_input == "reset123":
+#     # Allow editing only for 'Open' and 'In Progress' tickets
+#     # status_options = ["Open", "In Progress", "Completed"]
     
-        save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
-        st.success("In Progress/Open tickets updated successfully!")
+#     # Filter df_todo for editing
+#     edited_df_todo = st.data_editor(
+#         df,
+#         use_container_width=True,
+#         num_rows="dynamic",
+#         key="todo_tickets_table"
+#     )
+
+#     # Update only df_todo in the session state and save changes to Google Drive
+#     if not edited_df_todo.equals(df_todo):
+#         # df.update(edited_df_todo)  # Update the main DataFrame
+#         # save_to_drive(df, 'StatisticalAnalysisTickets.csv')
+#         # st.success("In Progress/Open tickets updated successfully!")
+#         st.session_state.df = st.session_state.df[~st.session_state.df["ID"].isin(df_todo["ID"])]  # Remove old 'df_todo' entries
+#         st.session_state.df = pd.concat([st.session_state.df, edited_df_todo], ignore_index=True)  # Add updated rows
+    
+#         save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
+#         st.success("In Progress/Open tickets updated successfully!")
 
 
    
