@@ -104,7 +104,8 @@ def download_file(real_file_id):
   return file.getvalue()
 
 
-download_file('StatisticalAnalysisTickets.csv')
+st.download_button("Download Ticket Data", data=st.session_state.df.to_csv().encode(), file_name="StatisticalAnalysisTickets.csv", mime="text/csv")
+
 ####################################################################
 
 
