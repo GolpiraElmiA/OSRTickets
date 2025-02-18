@@ -104,7 +104,7 @@ def download_file(real_file_id):
   return file.getvalue()
 
 
-download_file(''StatisticalAnalysisTickets.csv')
+download_file('StatisticalAnalysisTickets.csv')
 ####################################################################
 
 
