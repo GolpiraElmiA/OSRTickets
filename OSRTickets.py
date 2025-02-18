@@ -59,7 +59,7 @@ def load_data():
         data = request.execute()
         return pd.read_csv(io.BytesIO(data))
         
-    return pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"])
+    return pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Department", "Status", "Date Submitted", "Summary"])
 
 # Initialize or load data into session state
 if "df" not in st.session_state:
