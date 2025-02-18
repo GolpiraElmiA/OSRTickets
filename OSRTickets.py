@@ -107,13 +107,13 @@ with st.form("add_ticket_form"):
             "Name": name,
             "Request Type": request_type,
             "Email": email,
-            "Department": sections, #Changed from "Section" Feb18
+            "Department": section, #Changed from "Section" Feb18
             "Status": "Open",
             "Date Submitted": date_submitted,
             "Summary": summary,
         }
         st.session_state.df = pd.concat([st.session_state.df, pd.DataFrame([new_ticket])], ignore_index=True)
-        # st.session_state.df=st.session_state.df.drop(columns=['Section']) ## 18 FEB 2025*********
+
         save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
         st.success(f"Ticket {ticket_id} has been submitted successfully!")
 
