@@ -58,36 +58,34 @@ def load_data():
         request = drive_service.files().get_media(fileId=file_id)
         data = request.execute()
         return pd.read_csv(io.BytesIO(data))
-    return pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Department", "Status", "Date Submitted", "Summary"])
+        
+    return pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"])
 
 # Initialize or load data into session state
 if "df" not in st.session_state:
     st.session_state.df = load_data()
-    # Ensure the 'Name' column exists
-    # if 'Name' not in st.session_state.df.columns:
-    #     st.session_state.df['Name'] = ''
-    # if 'Priority' in st.session_state.df.columns:
-    #     st.session_state.df.drop (columns=['Priority'], inplace=True)
+    
+    ############################
 
 # Reset functionality
 def reset_data(password):
     correct_password = "reset123"  # Replace with a secure password
     if password == correct_password:
-        st.session_state.df = pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Department", "Status", "Date Submitted", "Summary"])
+        st.session_state.df = pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"])
         save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
         return True
     return False
 
 # Streamlit page configuration
-st.title("Office of Surgical Research | Orthopeadic Trauma Research")
+st.title("Office of Surgical Research | Orthopaedic Trauma Research")
 st.header("Statistical Support Request Form")
 
 # Ticket Form
 st.subheader("Submit a Support Ticket")
-departments = [
-    "Dentistry and Oral Health", "Ophthalmology", "Orthopaedic", "Pediatric Surgery", 
+sections = [
+    "Dentistry and Oral Health", "Ophthalmology", "Orthopaedic","Dr Schneider's Group", "Pediatric Surgery", 
     "Podiatry", "Transplant Surgery", "Vascular Surgery", "General Surgery",
-    "Oral and Maxillofacial", "Otolaryngology", "Plastic Surgery", 
+    "Oral and Maxillofacial", "Oncology","Otolaryngology", "Plastic Surgery", 
     "Thoracic Surgery", "Urology"
 ]
 
@@ -95,7 +93,7 @@ departments = [
 with st.form("add_ticket_form"):
     name = st.text_area("Name", placeholder="Please enter your full name here")
     request_type = st.selectbox("Request Type", ["New", "Follow-up"])
-    department = st.selectbox("Department", departments)
+    section = st.selectbox("Sections", sections)
     email = st.text_area("Email Address", placeholder="Enter your email address here...")
     issue = st.text_area("Description of the Issue", placeholder="Briefly describe the work or issue you're submitting.")
     date_submitted = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -109,67 +107,67 @@ with st.form("add_ticket_form"):
             "Name": name,
             "Request Type": request_type,
             "Email": email,
-            "Department": department,
+            "Section": section, 
             "Status": "Open",
             "Date Submitted": date_submitted,
             "Summary": summary,
         }
         st.session_state.df = pd.concat([st.session_state.df, pd.DataFrame([new_ticket])], ignore_index=True)
+        # st.session_state.df=st.session_state.df.rename(columns={'Department':'Section'}) ###***********
+
         save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
         st.success(f"Ticket {ticket_id} has been submitted successfully!")
 
 # Display Ticket Table
-st.subheader("Submitted Tickets")
+st.subheader("_________________________")
 
-# Use st.data_editor for inline editing of the DataFrame
+###############
+# Function to apply color formatting to the 'Status' column
+def color_status(val):
+    if val == 'In Progress':
+        return 'color: blue'
+    elif val == 'Open':
+        return 'color: green'
+    return ''
+
+# Apply the color formatting function to the 'Status' column
+styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
+
+################################# 31 Jan 2025
+st.subheader("Completed Tickets")
+df = st.session_state.df
+# df.rename(columns={"Department": "Section"}, inplace=True)
+st.session_state.df["Status"] = st.session_state.df["Status"].str.strip().str.title()
+df_completed=df[df["Status"].isin(["Completed"])]
+st.dataframe(df_completed, use_container_width=True)
+
+st.subheader("Works In Progress/Open")
+df_todo = df[df["Status"].isin(["In Progress", "Open"])]
+st.dataframe(df_todo.style.applymap(color_status, subset=['Status']), use_container_width=True)
+###################################
+
 # Password input for table editing
 password_input = st.text_input("Enter password to enable ticket edits", type="password")
 
 if password_input == "reset123":
-    # Allow editing if the password is correct
     edited_df = st.data_editor(
-        st.session_state.df,
+        st.session_state.df,  # Make sure you're editing the whole DataFrame
         use_container_width=True,
         num_rows="dynamic",
-        key="tickets_table",
+        key="todo_tickets_table"
     )
 
-    # Save the edits to session state and Google Drive
+    # Check if changes were made
     if not edited_df.equals(st.session_state.df):
-        st.session_state.df = edited_df
-        save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
+        st.session_state.df = edited_df  # Save changes in session state
+        save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')  # Save to Google Drive
         st.success("Tickets updated successfully!")
-
-    # Display the tickets and allow status updates
-    status_options = ["Open", "Closed", "In Progress"]  # Replace with actual status options
-
-    for idx, row in st.session_state.df.iterrows():
-        col1, col2, col3, col4 = st.columns([1, 1, 1, 1])  # Create columns for each section
-
-        with col1:
-            st.write(f"Ticket ID: {row['ID']}")
-        
-        with col2:
-            st.write(f"Name: {row['Name']}")
-
-        with col3:
-            status = st.selectbox(
-                label="Status", 
-                options=status_options, 
-                index=status_options.index(row['Status']),
-                key=f"status_{row['ID']}"
-            )
-        
-        with col4:
-            if st.button(f"Update Status for Ticket {row['ID']}", key=f"update_{row['ID']}"):
-                st.session_state.df.at[idx, 'Status'] = status
-                save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
-                st.success(f"Status for Ticket {row['ID']} has been updated to {status}")
+   
 
 else:
     # Display the table without editing capabilities if password is incorrect or not entered
     st.write("You must enter the correct password to edit the table.")
-    st.dataframe(st.session_state.df)
+    # st.dataframe(st.session_state.df)
 
 
 
@@ -195,9 +193,10 @@ st.markdown(
 
 
 if not st.session_state.df.empty:
+    # df.rename(columns={"Department": "Section"}, inplace=True)
     df = st.session_state.df
     status_counts = df["Status"].value_counts()
-    department_counts = df["Department"].value_counts()
+    section_counts = df["Section"].value_counts()
 
     #################### st.header("Ticket Insights")####################
 
@@ -208,10 +207,10 @@ if not st.session_state.df.empty:
             st.write(f"**{status}:** {count} tickets")
 
     with col2:
-        colors=sns.color_palette("light:#5A9", len(department_counts))
-        st.subheader("Tickets by Department")
-        fig, ax = plt.subplots(figsize=(2, 2))
-        department_counts.plot(kind="pie", colors=colors, labels=department_counts.index, textprops={'fontsize': 4}, ax=ax)
+        colors=sns.color_palette("light:#5A9", len(section_counts))
+        st.subheader("Tickets by Section")
+        fig, ax = plt.subplots(figsize=(5, 5))
+        section_counts.plot(kind="pie", colors=colors, labels=section_counts.index, textprops={'fontsize': 8}, ax=ax)
         ax.set_ylabel('')
         st.pyplot(fig)
 
