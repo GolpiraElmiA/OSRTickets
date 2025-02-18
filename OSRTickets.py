@@ -156,7 +156,6 @@ with st.form("add_ticket_form"):
             "Summary": summary,
         }
         st.session_state.df = pd.concat([st.session_state.df, pd.DataFrame([new_ticket])], ignore_index=True)
-        st.session_state.df=st.session_state.df.drop(columns=['Department']) ###***********
 
         save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
         st.success(f"Ticket {ticket_id} has been submitted successfully!")
@@ -179,7 +178,7 @@ styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
 ################################# 31 Jan 2025
 st.subheader("Completed Tickets")
 df = st.session_state.df
-# df.rename(columns={"Department": "Section"}, inplace=True)
+
 st.session_state.df["Status"] = st.session_state.df["Status"].str.strip().str.title()
 df_completed=df[df["Status"].isin(["Completed"])]
 st.dataframe(df_completed, use_container_width=True)
