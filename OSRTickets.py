@@ -209,7 +209,7 @@ if not st.session_state.df.empty:
     with col2:
         colors=sns.color_palette("light:#5A9", len(section_counts))
         st.subheader("Tickets by Section")
-        fig, ax = plt.subplots(figsize=(2, 2))
+        fig, ax = plt.subplots(figsize=(8, 8))
         section_counts.plot(kind="pie", colors=colors, labels=section_counts.index, textprops={'fontsize': 2}, ax=ax)
         ax.set_ylabel('')
         st.pyplot(fig)
