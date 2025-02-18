@@ -63,9 +63,7 @@ def load_data():
 
 # Initialize or load data into session state
 if "df" not in st.session_state:
-    df=load_data() ############################FEB18
-    df= df.rename(columns={"Department": "Section"})
-    st.session_state.df = df
+    st.session_state.df = load_data()
     ############################
     # Ensure the 'Name' column exists
 
