@@ -12,6 +12,11 @@ import os
 import io
 import time
 
+####################################################################
+import google.auth
+from googleapiclient.errors import HttpError
+from googleapiclient.http import MediaIoBaseDownload
+####################################################################
 # Access the credentials stored in Streamlit secrets
 google_secrets = st.secrets["google_service_account"]["service_account_json"]
 
@@ -65,7 +70,44 @@ def load_data():
 if "df" not in st.session_state:
     st.session_state.df = load_data()
     
-    ############################
+####################################################################
+def download_file(real_file_id):
+  # """Downloads a file
+  # Args:
+  #     real_file_id: ID of the file to download
+  # Returns : IO object with location.
+
+  # Load pre-authorized user credentials from the environment.
+  # TODO(developer) - See https://developers.google.com/identity
+  # for guides on implementing OAuth2 for the application.
+  # """
+  # creds, _ = google.auth.default()
+
+  try:
+    # create drive api client
+    service = build("drive", "v3", credentials=credentials)
+    file_id = real_file_id
+
+    # pylint: disable=maybe-no-member
+    request = service.files().get_media(fileId=file_id)
+    file = io.BytesIO()
+    downloader = MediaIoBaseDownload(file, request)
+    done = False
+    while done is False:
+      status, done = downloader.next_chunk()
+      print(f"Download {int(status.progress() * 100)}.")
+
+  except HttpError as error:
+    print(f"An error occurred: {error}")
+    file = None
+
+  return file.getvalue()
+
+
+download_file(''StatisticalAnalysisTickets.csv')
+####################################################################
+
+
 
 # Reset functionality
 def reset_data(password):
