@@ -107,7 +107,7 @@ with st.form("add_ticket_form"):
             "Name": name,
             "Request Type": request_type,
             "Email": email,
-            "Department": section, #Changed from "Section" Feb18
+            "Section": section, 
             "Status": "Open",
             "Date Submitted": date_submitted,
             "Summary": summary,
