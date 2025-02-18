@@ -57,16 +57,17 @@ def load_data():
         file_id = result['files'][0]['id']
         request = drive_service.files().get_media(fileId=file_id)
         data = request.execute()
-        # df = df.rename(columns={"Department": "Section"}) ######### 18Feb
         return pd.read_csv(io.BytesIO(data))
         
     return pd.DataFrame(columns=["ID", "Name", "Department","Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"])
 
 # Initialize or load data into session state
 if "df" not in st.session_state:
-    df=load_data()######### 18Feb
-    df = df.rename(columns={"Department": "Section"}) 
-    st.session_state.df = df
+    # df=######### 18Feb
+    # df = df.rename(columns={"Department": "Section"}) 
+    st.session_state.df = load_data()
+
+
     ############################
     # Ensure the 'Name' column exists
 
