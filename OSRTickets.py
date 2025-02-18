@@ -113,6 +113,7 @@ with st.form("add_ticket_form"):
             "Summary": summary,
         }
         st.session_state.df = pd.concat([st.session_state.df, pd.DataFrame([new_ticket])], ignore_index=True)
+        st.session_state.df=st.session_state.df.rename(columns={'Department':'Section'}) ###***********
 
         save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
         st.success(f"Ticket {ticket_id} has been submitted successfully!")
