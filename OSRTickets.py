@@ -66,7 +66,7 @@ if "df" not in st.session_state:
     
 
     st.session_state.df = load_data()
-    st.session_state.df.rename(columns={"Department": "Section"}, inplace=True) # df=######### 18Feb
+    # st.session_state.df.rename(columns={"Department": "Section"}, inplace=True) # df=######### 18Feb
 
 
     ############################
