@@ -58,7 +58,7 @@ def load_data():
         request = drive_service.files().get_media(fileId=file_id)
         data = request.execute()
         return pd.read_csv(io.BytesIO(data))
-         # df.rename(columns={"Department": "Section"}, inplace=True)
+        df.rename(columns={"Department": "Section"}, inplace=True) ######### 18Feb
     return pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"])
 
 # Initialize or load data into session state
