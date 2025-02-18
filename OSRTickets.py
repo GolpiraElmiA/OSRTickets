@@ -59,18 +59,15 @@ def load_data():
         data = request.execute()
         return pd.read_csv(io.BytesIO(data))
         
-    return pd.DataFrame(columns=["ID", "Name", "Department","Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"])
+    return pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"])
 
 # Initialize or load data into session state
 if "df" not in st.session_state:
-    
-
     st.session_state.df = load_data()
     # st.session_state.df.rename(columns={"Department": "Section"}, inplace=True) # df=######### 18Feb
 
 
     ############################
-    # Ensure the 'Name' column exists
 
 # Reset functionality
 def reset_data(password):
@@ -112,7 +109,7 @@ with st.form("add_ticket_form"):
             "Name": name,
             "Request Type": request_type,
             "Email": email,
-            "Section": sections,
+            "Department": sections, #Changed from "Section" Feb18
             "Status": "Open",
             "Date Submitted": date_submitted,
             "Summary": summary,
@@ -199,7 +196,7 @@ if not st.session_state.df.empty:
     # df.rename(columns={"Department": "Section"}, inplace=True)
     df = st.session_state.df
     status_counts = df["Status"].value_counts()
-    section_counts = df["Section"].value_counts()
+    section_counts = df["Department"].value_counts() #Changed from "Section" Feb18
 
     #################### st.header("Ticket Insights")####################
 
