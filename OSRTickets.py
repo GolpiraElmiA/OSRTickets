@@ -59,7 +59,7 @@ def load_data():
         data = request.execute()
         return pd.read_csv(io.BytesIO(data))
         
-    return pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Department", "Status", "Date Submitted", "Summary"])
+    return pd.DataFrame(columns=["ID", "Name", "Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"])
 
 # Initialize or load data into session state
 if "df" not in st.session_state:
@@ -113,7 +113,7 @@ with st.form("add_ticket_form"):
             "Summary": summary,
         }
         st.session_state.df = pd.concat([st.session_state.df, pd.DataFrame([new_ticket])], ignore_index=True)
-        st.session_state.df=st.session_state.df.rename(columns={'Department':'Section'}) ###***********
+        # st.session_state.df=st.session_state.df.rename(columns={'Department':'Section'}) ###***********
 
         save_to_drive(st.session_state.df, 'StatisticalAnalysisTickets.csv')
         st.success(f"Ticket {ticket_id} has been submitted successfully!")
@@ -196,7 +196,7 @@ if not st.session_state.df.empty:
     # df.rename(columns={"Department": "Section"}, inplace=True)
     df = st.session_state.df
     status_counts = df["Status"].value_counts()
-    section_counts = df["Department"].value_counts() #Changed from "Section" Feb18
+    section_counts = df["Section"].value_counts()
 
     #################### st.header("Ticket Insights")####################
 
