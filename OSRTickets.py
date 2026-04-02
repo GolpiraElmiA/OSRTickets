@@ -173,7 +173,12 @@ def color_status(val):
     return ''
 
 # Apply the color formatting function to the 'Status' column
-styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
+# styled_df = st.session_state.df.style.applymap(color_status, subset=['Status']) ######### April2026
+if 'df' in st.session_state and not st.session_state.df.empty:
+    styled_df = st.session_state.df.style.applymap(color_status, subset=['Status'])
+    st.dataframe(styled_df)
+else:
+    st.warning("Data not loaded yet!")
 
 ################################# 31 Jan 2025
 st.subheader("Completed Tickets")
