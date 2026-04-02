@@ -164,8 +164,15 @@ with st.form("add_ticket_form"):
 st.subheader("_________________________")
 
 ###############
-# ------------------- Color formatting for Status -------------------
+# ------------------- Prepare dataframe (THIS WAS MISSING) -------------------
+df = st.session_state.df.copy()
+
+# Clean Status column safely
+df["Status"] = df["Status"].astype(str).str.strip().str.title()
+
+# ------------------- Color formatting -------------------
 def color_status_html(val):
+    val = str(val).strip()
     if val == 'In Progress':
         color = "blue"
     elif val == 'Open':
@@ -176,20 +183,21 @@ def color_status_html(val):
         color = "black"
     return f'<span style="color:{color}; font-weight:bold">{val}</span>'
 
-# ------------------- Optional: truncate Summary for display -------------------
+# ------------------- Truncate Summary -------------------
 def truncate_summary(val, length=150):
     if pd.isna(val):
         return ""
+    val = str(val)
     return val if len(val) <= length else val[:length] + "..."
 
-# ------------------- CSS for responsive table -------------------
+# ------------------- CSS -------------------
 st.markdown("""
 <style>
 table {
   border-collapse: collapse;
-  width: auto;  /* Fit table width to content */
+  width: auto;
   font-size: 14px;
-  table-layout: auto; /* Columns auto-size to content */
+  table-layout: auto;
 }
 th, td {
   padding: 8px 10px;
@@ -203,35 +211,123 @@ th {
 tr:nth-child(even) {
   background-color: #fafafa;
 }
-/* Limit Summary column width */
 td:nth-child(8), th:nth-child(8) {
   max-width: 400px;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ------------------- Columns to display -------------------
+# ------------------- Columns -------------------
 display_columns = ["ID", "Name", "Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"]
 
-
-
-######
+# ------------------- Works In Progress / Open -------------------
 st.subheader("Works In Progress / Open")
 
 df_todo = df[df["Status"].isin(["In Progress", "Open"])].copy()
-df_todo["Status"] = df_todo["Status"].apply(color_status_html)
-df_todo["Summary"] = df_todo["Summary"].apply(lambda x: truncate_summary(x, 150))
 
-st.write(df_todo[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
+if not df_todo.empty:
+    df_todo["Status"] = df_todo["Status"].apply(color_status_html)
+    df_todo["Summary"] = df_todo["Summary"].apply(lambda x: truncate_summary(x, 150))
+    st.write(df_todo[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
+else:
+    st.info("No open or in-progress tickets.")
 
-
+# ------------------- Completed Tickets -------------------
 st.subheader("Completed Tickets")
 
 df_completed = df[df["Status"] == "Completed"].copy()
-df_completed["Status"] = df_completed["Status"].apply(color_status_html)
-df_completed["Summary"] = df_completed["Summary"].apply(lambda x: truncate_summary(x, 150))
 
-st.write(df_completed[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
+if not df_completed.empty:
+    df_completed["Status"] = df_completed["Status"].apply(color_status_html)
+    df_completed["Summary"] = df_completed["Summary"].apply(lambda x: truncate_summary(x, 150))
+    st.write(df_completed[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
+else:
+    st.info("No completed tickets.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # ------------------- Color formatting for Status -------------------
+# def color_status_html(val):
+#     if val == 'In Progress':
+#         color = "blue"
+#     elif val == 'Open':
+#         color = "green"
+#     elif val == 'Completed':
+#         color = "gray"
+#     else:
+#         color = "black"
+#     return f'<span style="color:{color}; font-weight:bold">{val}</span>'
+
+# # ------------------- Optional: truncate Summary for display -------------------
+# def truncate_summary(val, length=150):
+#     if pd.isna(val):
+#         return ""
+#     return val if len(val) <= length else val[:length] + "..."
+
+# # ------------------- CSS for responsive table -------------------
+# st.markdown("""
+# <style>
+# table {
+#   border-collapse: collapse;
+#   width: auto;  /* Fit table width to content */
+#   font-size: 14px;
+#   table-layout: auto; /* Columns auto-size to content */
+# }
+# th, td {
+#   padding: 8px 10px;
+#   text-align: left;
+#   vertical-align: top;
+#   word-wrap: break-word;
+# }
+# th {
+#   background-color: #f0f0f0;
+# }
+# tr:nth-child(even) {
+#   background-color: #fafafa;
+# }
+# /* Limit Summary column width */
+# td:nth-child(8), th:nth-child(8) {
+#   max-width: 400px;
+# }
+# </style>
+# """, unsafe_allow_html=True)
+
+# # ------------------- Columns to display -------------------
+# display_columns = ["ID", "Name", "Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"]
+
+
+
+# ######
+# st.subheader("Works In Progress / Open")
+
+# df_todo = df[df["Status"].isin(["In Progress", "Open"])].copy()
+# df_todo["Status"] = df_todo["Status"].apply(color_status_html)
+# df_todo["Summary"] = df_todo["Summary"].apply(lambda x: truncate_summary(x, 150))
+
+# st.write(df_todo[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
+
+
+# st.subheader("Completed Tickets")
+
+# df_completed = df[df["Status"] == "Completed"].copy()
+# df_completed["Status"] = df_completed["Status"].apply(color_status_html)
+# df_completed["Summary"] = df_completed["Summary"].apply(lambda x: truncate_summary(x, 150))
+
+# st.write(df_completed[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 # # ------------------- Completed Tickets -------------------
 # st.subheader("Completed Tickets")
