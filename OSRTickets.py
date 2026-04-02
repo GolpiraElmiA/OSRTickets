@@ -212,7 +212,7 @@ tr:nth-child(even) {
   background-color: #fafafa;
 }
 td:nth-child(8), th:nth-child(8) {
-  max-width: 400px;
+  max-width: 500px;
 }
 </style>
 """, unsafe_allow_html=True)
