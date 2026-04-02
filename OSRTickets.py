@@ -175,7 +175,7 @@ def color_status_html(val):
         color = "gray"
     else:
         color = "black"
-    return f"<span style='color:{color}'>{val}</span>"
+    return f'<span style="color:{color}">{val}</span>'
 
 # ------------------- Display Completed Tickets -------------------
 st.subheader("Completed Tickets")
@@ -183,32 +183,64 @@ df = st.session_state.df.copy()
 df["Status"] = df["Status"].str.strip().str.title()
 
 df_completed = df[df["Status"] == "Completed"].copy()
-
-# Apply HTML coloring to Status column
 df_completed["Status"] = df_completed["Status"].apply(color_status_html)
 
-# Display using st.markdown with unsafe_allow_html
-for i, row in df_completed.iterrows():
-    st.markdown(
-        f"**ID:** {row['ID']} | **Name:** {row['Name']} | "
-        f"**Type:** {row['Request Type']} | **Section:** {row['Section']} | "
-        f"**Status:** {row['Status']} | **Date:** {row['Date Submitted']}",
-        unsafe_allow_html=True
-    )
+# Use .to_html + st.write to preserve table + HTML colors
+st.write(df_completed.to_html(escape=False, index=False), unsafe_allow_html=True)
 
 # ------------------- Display Works In Progress / Open -------------------
 st.subheader("Works In Progress / Open")
 df_todo = df[df["Status"].str.contains("In Progress|Open")].copy()
-
 df_todo["Status"] = df_todo["Status"].apply(color_status_html)
 
-for i, row in df_todo.iterrows():
-    st.markdown(
-        f"**ID:** {row['ID']} | **Name:** {row['Name']} | "
-        f"**Type:** {row['Request Type']} | **Section:** {row['Section']} | "
-        f"**Status:** {row['Status']} | **Date:** {row['Date Submitted']}",
-        unsafe_allow_html=True
-    )
+st.write(df_todo.to_html(escape=False, index=False), unsafe_allow_html=True)
+
+
+
+# def color_status_html(val):
+#     """Return HTML span with colored Status text."""
+#     if val == 'In Progress':
+#         color = "blue"
+#     elif val == 'Open':
+#         color = "green"
+#     elif val == 'Completed':
+#         color = "gray"
+#     else:
+#         color = "black"
+#     return f"<span style='color:{color}'>{val}</span>"
+
+# # ------------------- Display Completed Tickets -------------------
+# st.subheader("Completed Tickets")
+# df = st.session_state.df.copy()
+# df["Status"] = df["Status"].str.strip().str.title()
+
+# df_completed = df[df["Status"] == "Completed"].copy()
+
+# # Apply HTML coloring to Status column
+# df_completed["Status"] = df_completed["Status"].apply(color_status_html)
+
+# # Display using st.markdown with unsafe_allow_html
+# for i, row in df_completed.iterrows():
+#     st.markdown(
+#         f"**ID:** {row['ID']} | **Name:** {row['Name']} | "
+#         f"**Type:** {row['Request Type']} | **Section:** {row['Section']} | "
+#         f"**Status:** {row['Status']} | **Date:** {row['Date Submitted']}",
+#         unsafe_allow_html=True
+#     )
+
+# # ------------------- Display Works In Progress / Open -------------------
+# st.subheader("Works In Progress / Open")
+# df_todo = df[df["Status"].str.contains("In Progress|Open")].copy()
+
+# df_todo["Status"] = df_todo["Status"].apply(color_status_html)
+
+# for i, row in df_todo.iterrows():
+#     st.markdown(
+#         f"**ID:** {row['ID']} | **Name:** {row['Name']} | "
+#         f"**Type:** {row['Request Type']} | **Section:** {row['Section']} | "
+#         f"**Status:** {row['Status']} | **Date:** {row['Date Submitted']}",
+#         unsafe_allow_html=True
+#     )
 
 # # Function to apply color formatting to the 'Status' column
 # def color_status(val):
