@@ -166,7 +166,6 @@ st.subheader("_________________________")
 ###############
 # ------------------- Color formatting for Status -------------------
 def color_status_html(val):
-    """Return HTML span with colored Status text."""
     if val == 'In Progress':
         color = "blue"
     elif val == 'Open':
@@ -178,19 +177,19 @@ def color_status_html(val):
     return f'<span style="color:{color}; font-weight:bold">{val}</span>'
 
 # ------------------- Optional: truncate Summary for display -------------------
-def truncate_summary(val, length=100):
+def truncate_summary(val, length=150):
     if pd.isna(val):
         return ""
     return val if len(val) <= length else val[:length] + "..."
 
-# ------------------- CSS for nicer table -------------------
+# ------------------- CSS for responsive table -------------------
 st.markdown("""
 <style>
 table {
   border-collapse: collapse;
-  width: 100%;
+  width: auto;  /* Fit table width to content */
   font-size: 14px;
-  table-layout: fixed;
+  table-layout: auto; /* Columns auto-size to content */
 }
 th, td {
   padding: 8px 10px;
@@ -204,8 +203,76 @@ th {
 tr:nth-child(even) {
   background-color: #fafafa;
 }
+/* Limit Summary column width */
+td:nth-child(8), th:nth-child(8) {
+  max-width: 400px;
+}
 </style>
 """, unsafe_allow_html=True)
+
+# ------------------- Columns to display -------------------
+display_columns = ["ID", "Name", "Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"]
+
+# ------------------- Completed Tickets -------------------
+st.subheader("Completed Tickets")
+df = st.session_state.df.copy()
+df["Status"] = df["Status"].str.strip().str.title()
+
+df_completed = df[df["Status"] == "Completed"].copy()
+df_completed["Status"] = df_completed["Status"].apply(color_status_html)
+df_completed["Summary"] = df_completed["Summary"].apply(lambda x: truncate_summary(x, 150))
+
+st.write(df_completed[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
+
+# ------------------- Works In Progress / Open -------------------
+st.subheader("Works In Progress / Open")
+df_todo = df[df["Status"].str.contains("In Progress|Open")].copy()
+df_todo["Status"] = df_todo["Status"].apply(color_status_html)
+df_todo["Summary"] = df_todo["Summary"].apply(lambda x: truncate_summary(x, 150))
+
+st.write(df_todo[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
+# # ------------------- Color formatting for Status -------------------
+# def color_status_html(val):
+#     """Return HTML span with colored Status text."""
+#     if val == 'In Progress':
+#         color = "blue"
+#     elif val == 'Open':
+#         color = "green"
+#     elif val == 'Completed':
+#         color = "gray"
+#     else:
+#         color = "black"
+#     return f'<span style="color:{color}; font-weight:bold">{val}</span>'
+
+# # ------------------- Optional: truncate Summary for display -------------------
+# def truncate_summary(val, length=100):
+#     if pd.isna(val):
+#         return ""
+#     return val if len(val) <= length else val[:length] + "..."
+
+# # ------------------- CSS for nicer table -------------------
+# st.markdown("""
+# <style>
+# table {
+#   border-collapse: collapse;
+#   width: 100%;
+#   font-size: 14px;
+#   table-layout: fixed;
+# }
+# th, td {
+#   padding: 8px 10px;
+#   text-align: left;
+#   vertical-align: top;
+#   word-wrap: break-word;
+# }
+# th {
+#   background-color: #f0f0f0;
+# }
+# tr:nth-child(even) {
+#   background-color: #fafafa;
+# }
+# </style>
+# """, unsafe_allow_html=True)
 
 # ------------------- Columns to display -------------------
 display_columns = ["ID", "Name", "Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"]
