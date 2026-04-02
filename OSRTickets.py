@@ -215,10 +215,17 @@ display_columns = ["ID", "Name", "Request Type", "Email", "Section", "Status", "
 
 
 
-# ------------------- Completed Tickets -------------------
+######
+st.subheader("Works In Progress / Open")
+
+df_todo = df[df["Status"].isin(["In Progress", "Open"])].copy()
+df_todo["Status"] = df_todo["Status"].apply(color_status_html)
+df_todo["Summary"] = df_todo["Summary"].apply(lambda x: truncate_summary(x, 150))
+
+st.write(df_todo[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
+
+
 st.subheader("Completed Tickets")
-df = st.session_state.df.copy()
-df["Status"] = df["Status"].str.strip().str.title()
 
 df_completed = df[df["Status"] == "Completed"].copy()
 df_completed["Status"] = df_completed["Status"].apply(color_status_html)
@@ -226,13 +233,24 @@ df_completed["Summary"] = df_completed["Summary"].apply(lambda x: truncate_summa
 
 st.write(df_completed[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
 
-# ------------------- Works In Progress / Open -------------------
-st.subheader("Works In Progress / Open")
-df_todo = df[df["Status"].str.contains("In Progress|Open")].copy()
-df_todo["Status"] = df_todo["Status"].apply(color_status_html)
-df_todo["Summary"] = df_todo["Summary"].apply(lambda x: truncate_summary(x, 150))
+# # ------------------- Completed Tickets -------------------
+# st.subheader("Completed Tickets")
+# df = st.session_state.df.copy()
+# df["Status"] = df["Status"].str.strip().str.title()
 
-st.write(df_todo[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
+# df_completed = df[df["Status"] == "Completed"].copy()
+# df_completed["Status"] = df_completed["Status"].apply(color_status_html)
+# df_completed["Summary"] = df_completed["Summary"].apply(lambda x: truncate_summary(x, 150))
+
+# st.write(df_completed[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
+
+# # ------------------- Works In Progress / Open -------------------
+# st.subheader("Works In Progress / Open")
+# df_todo = df[df["Status"].str.contains("In Progress|Open")].copy()
+# df_todo["Status"] = df_todo["Status"].apply(color_status_html)
+# df_todo["Summary"] = df_todo["Summary"].apply(lambda x: truncate_summary(x, 150))
+
+# st.write(df_todo[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 
 ###################################
