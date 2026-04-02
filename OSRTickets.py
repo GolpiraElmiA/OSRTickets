@@ -164,48 +164,94 @@ with st.form("add_ticket_form"):
 st.subheader("_________________________")
 
 ###############
-# Function to apply color formatting to the 'Status' column
-def color_status(val):
+# ------------------- Color Formatting Function -------------------
+def color_status_html(val):
+    """Return HTML span with colored Status text."""
     if val == 'In Progress':
-        return 'color: blue'
+        color = "blue"
     elif val == 'Open':
-        return 'color: green'
+        color = "green"
     elif val == 'Completed':
-        return 'color: gray'
-    return ''
+        color = "gray"
+    else:
+        color = "black"
+    return f"<span style='color:{color}'>{val}</span>"
 
-# Apply the color formatting function to the 'Status' column
-# styled_df = st.session_state.df.style.applymap(color_status, subset=['Status']) ######### April2026
-# Safe Styler wrapper to avoid AttributeError
-def safe_styler(df, column, style_func):
-    if df is None or df.empty:
-        st.warning("No data available.")
-        return None
-    if column not in df.columns:
-        st.warning(f"Column '{column}' not found in the DataFrame.")
-        return None
-    # Fill NaN with empty string to avoid applymap errors
-    df_copy = df.copy()
-    df_copy[column] = df_copy[column].fillna('')
-    return df_copy.style.applymap(style_func, subset=[column])
-
-################################# 31 Jan 2025
+# ------------------- Display Completed Tickets -------------------
 st.subheader("Completed Tickets")
-df = st.session_state.df
+df = st.session_state.df.copy()
+df["Status"] = df["Status"].str.strip().str.title()
 
-st.session_state.df["Status"] = st.session_state.df["Status"].str.strip().str.title()
-df_completed=df[df["Status"].isin(["Completed"])]
-# st.dataframe(df_completed, use_container_width=True)
-styled_completed = safe_styler(df_completed, "Status", color_status)
-if styled_completed is not None:
-    st.dataframe(styled_completed, use_container_width=True)
+df_completed = df[df["Status"] == "Completed"].copy()
 
-st.subheader("Works In Progress/Open")
-df_todo = df[df["Status"].isin(["In Progress", "Open"])]
-# st.dataframe(df_todo.style.applymap(color_status, subset=['Status']), use_container_width=True)
-styled_todo = safe_styler(df_todo, "Status", color_status)
-if styled_todo is not None:
-    st.dataframe(styled_todo, use_container_width=True)
+# Apply HTML coloring to Status column
+df_completed["Status"] = df_completed["Status"].apply(color_status_html)
+
+# Display using st.markdown with unsafe_allow_html
+for i, row in df_completed.iterrows():
+    st.markdown(
+        f"**ID:** {row['ID']} | **Name:** {row['Name']} | "
+        f"**Type:** {row['Request Type']} | **Section:** {row['Section']} | "
+        f"**Status:** {row['Status']} | **Date:** {row['Date Submitted']}",
+        unsafe_allow_html=True
+    )
+
+# ------------------- Display Works In Progress / Open -------------------
+st.subheader("Works In Progress / Open")
+df_todo = df[df["Status"].str.contains("In Progress|Open")].copy()
+
+df_todo["Status"] = df_todo["Status"].apply(color_status_html)
+
+for i, row in df_todo.iterrows():
+    st.markdown(
+        f"**ID:** {row['ID']} | **Name:** {row['Name']} | "
+        f"**Type:** {row['Request Type']} | **Section:** {row['Section']} | "
+        f"**Status:** {row['Status']} | **Date:** {row['Date Submitted']}",
+        unsafe_allow_html=True
+    )
+
+# # Function to apply color formatting to the 'Status' column
+# def color_status(val):
+#     if val == 'In Progress':
+#         return 'color: blue'
+#     elif val == 'Open':
+#         return 'color: green'
+#     elif val == 'Completed':
+#         return 'color: gray'
+#     return ''
+
+# # Apply the color formatting function to the 'Status' column
+# # styled_df = st.session_state.df.style.applymap(color_status, subset=['Status']) ######### April2026
+# # Safe Styler wrapper to avoid AttributeError
+# def safe_styler(df, column, style_func):
+#     if df is None or df.empty:
+#         st.warning("No data available.")
+#         return None
+#     if column not in df.columns:
+#         st.warning(f"Column '{column}' not found in the DataFrame.")
+#         return None
+#     # Fill NaN with empty string to avoid applymap errors
+#     df_copy = df.copy()
+#     df_copy[column] = df_copy[column].fillna('')
+#     return df_copy.style.applymap(style_func, subset=[column])
+
+# ################################# 31 Jan 2025
+# st.subheader("Completed Tickets")
+# df = st.session_state.df
+
+# st.session_state.df["Status"] = st.session_state.df["Status"].str.strip().str.title()
+# df_completed=df[df["Status"].isin(["Completed"])]
+# # st.dataframe(df_completed, use_container_width=True)
+# styled_completed = safe_styler(df_completed, "Status", color_status)
+# if styled_completed is not None:
+#     st.dataframe(styled_completed, use_container_width=True)
+
+# st.subheader("Works In Progress/Open")
+# df_todo = df[df["Status"].isin(["In Progress", "Open"])]
+# # st.dataframe(df_todo.style.applymap(color_status, subset=['Status']), use_container_width=True)
+# styled_todo = safe_styler(df_todo, "Status", color_status)
+# if styled_todo is not None:
+#     st.dataframe(styled_todo, use_container_width=True)
 ###################################
 
 # Password input for table editing
