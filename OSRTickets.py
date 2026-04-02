@@ -170,6 +170,8 @@ def color_status(val):
         return 'color: blue'
     elif val == 'Open':
         return 'color: green'
+    elif val == 'Completed':
+        return 'color: gray'
     return ''
 
 # Apply the color formatting function to the 'Status' column
@@ -193,11 +195,17 @@ df = st.session_state.df
 
 st.session_state.df["Status"] = st.session_state.df["Status"].str.strip().str.title()
 df_completed=df[df["Status"].isin(["Completed"])]
-st.dataframe(df_completed, use_container_width=True)
+# st.dataframe(df_completed, use_container_width=True)
+styled_completed = safe_styler(df_completed, "Status", color_status)
+if styled_completed is not None:
+    st.dataframe(styled_completed, use_container_width=True)
 
 st.subheader("Works In Progress/Open")
 df_todo = df[df["Status"].isin(["In Progress", "Open"])]
-st.dataframe(df_todo.style.applymap(color_status, subset=['Status']), use_container_width=True)
+# st.dataframe(df_todo.style.applymap(color_status, subset=['Status']), use_container_width=True)
+styled_todo = safe_styler(df_todo, "Status", color_status)
+if styled_todo is not None:
+    st.dataframe(styled_todo, use_container_width=True)
 ###################################
 
 # Password input for table editing
