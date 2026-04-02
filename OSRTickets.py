@@ -140,7 +140,7 @@ with st.form("add_ticket_form"):
     email = st.text_area("Email Address", placeholder="Enter your email address here...")
     issue = st.text_area("Description of the Issue", placeholder="Briefly describe the work or issue you're submitting.")
     date_submitted = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    summary = issue[:5000]  # Create a brief summary (first 5000 characters)
+    summary = issue[:10000]  # Create a brief summary (first 10000 characters)
 
     submitted = st.form_submit_button("Submit")
     if submitted:
@@ -212,7 +212,7 @@ tr:nth-child(even) {
   background-color: #fafafa;
 }
 td:nth-child(8), th:nth-child(8) {
-  max-width: 500px;
+  max-width: 600px;
 }
 </style>
 """, unsafe_allow_html=True)
