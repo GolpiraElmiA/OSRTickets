@@ -232,17 +232,17 @@ if not df_todo.empty:
 else:
     st.info("No open or in-progress tickets.")
 
-# ------------------- Completed Tickets -------------------
-st.subheader("Completed Tickets")
+# # ------------------- Completed Tickets -------------------
+# st.subheader("Completed Tickets")
 
-df_completed = df[df["Status"] == "Completed"].copy()
+# df_completed = df[df["Status"] == "Completed"].copy()
 
-if not df_completed.empty:
-    df_completed["Status"] = df_completed["Status"].apply(color_status_html)
-    df_completed["Summary"] = df_completed["Summary"].apply(lambda x: truncate_summary(x, 150))
-    st.write(df_completed[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
-else:
-    st.info("No completed tickets.")
+# if not df_completed.empty:
+#     df_completed["Status"] = df_completed["Status"].apply(color_status_html)
+#     df_completed["Summary"] = df_completed["Summary"].apply(lambda x: truncate_summary(x, 150))
+#     st.write(df_completed[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
+# else:
+#     st.info("No completed tickets.")
 
 ###################################
 
@@ -322,3 +322,16 @@ with st.expander("Reset Tickets (Admin Only)"):
             st.success("Tickets have been reset successfully!")
         else:
             st.error("Incorrect password. Tickets were not reset.")
+
+
+# ------------------- Completed Tickets -------------------
+st.subheader("Completed Tickets")
+
+df_completed = df[df["Status"] == "Completed"].copy()
+
+if not df_completed.empty:
+    df_completed["Status"] = df_completed["Status"].apply(color_status_html)
+    df_completed["Summary"] = df_completed["Summary"].apply(lambda x: truncate_summary(x, 150))
+    st.write(df_completed[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
+else:
+    st.info("No completed tickets.")
