@@ -274,28 +274,28 @@ st.write(df_todo[display_columns].to_html(escape=False, index=False), unsafe_all
 # </style>
 # """, unsafe_allow_html=True)
 
-# ------------------- Columns to display -------------------
-display_columns = ["ID", "Name", "Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"]
+# # ------------------- Columns to display -------------------
+# display_columns = ["ID", "Name", "Request Type", "Email", "Section", "Status", "Date Submitted", "Summary"]
 
-# ------------------- Display Completed Tickets -------------------
-st.subheader("Completed Tickets")
-df = st.session_state.df.copy()
-df["Status"] = df["Status"].str.strip().str.title()
-df_completed = df[df["Status"] == "Completed"].copy()
+# # ------------------- Display Completed Tickets -------------------
+# st.subheader("Completed Tickets")
+# df = st.session_state.df.copy()
+# df["Status"] = df["Status"].str.strip().str.title()
+# df_completed = df[df["Status"] == "Completed"].copy()
 
-# Apply coloring and optional truncation
-df_completed["Status"] = df_completed["Status"].apply(color_status_html)
-df_completed["Summary"] = df_completed["Summary"].apply(lambda x: truncate_summary(x, 150))
+# # Apply coloring and optional truncation
+# df_completed["Status"] = df_completed["Status"].apply(color_status_html)
+# df_completed["Summary"] = df_completed["Summary"].apply(lambda x: truncate_summary(x, 150))
 
-st.write(df_completed[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
+# st.write(df_completed[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
 
-# ------------------- Display Works In Progress / Open -------------------
-st.subheader("Works In Progress / Open")
-df_todo = df[df["Status"].str.contains("In Progress|Open")].copy()
-df_todo["Status"] = df_todo["Status"].apply(color_status_html)
-df_todo["Summary"] = df_todo["Summary"].apply(lambda x: truncate_summary(x, 150))
+# # ------------------- Display Works In Progress / Open -------------------
+# st.subheader("Works In Progress / Open")
+# df_todo = df[df["Status"].str.contains("In Progress|Open")].copy()
+# df_todo["Status"] = df_todo["Status"].apply(color_status_html)
+# df_todo["Summary"] = df_todo["Summary"].apply(lambda x: truncate_summary(x, 150))
 
-st.write(df_todo[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
+# st.write(df_todo[display_columns].to_html(escape=False, index=False), unsafe_allow_html=True)
 # # ------------------- Color Formatting Function -------------------
 # def color_status_html(val):
 #     """Return HTML span with colored Status text."""
